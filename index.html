@@ -58,7 +58,7 @@
       flex-shrink: 0; user-select: none;
     }
 
-    /* ===== 项目名（顶栏左侧） ===== */
+    /* ===== 品牌名 ===== */
     .brand-name {
       font-size: 15px;
       font-weight: 800;
@@ -71,22 +71,21 @@
       gap: 6px;
     }
     .brand-name svg {
-      width: 20px;
-      height: 20px;
+      width: 20px; height: 20px;
       fill: #3498db;
     }
 
     /* ===== 瓦片按钮 ===== */
     .tile-btn {
       flex-shrink: 0;
-      padding: 7px 0 15px;
-      border: 1.5px solid rgba.(0, 0, 0, 0.12);
+      padding: 7px 15px;
+      border: 1.5px solid rgba(0, 0, 0, 0.12);
       border-radius: 20px;
       background: rgba(255, 255, 255, 0.75);
       color: #444;
       font-size: 13px; font-weight: 500;
       cursor: pointer;
-      transition: all 0.18s ease;
+      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
       -webkit-tap-highlight-color: transparent;
       user-select: none; white-space: nowrap;
       min-height: 36px;
@@ -95,7 +94,7 @@
       line-height: 1;
     }
     .tile-btn:hover {
-      background: rgba(52, 152, 219,1);
+      background: rgba(52, 152, 219, 0.1);
       border-color: #3498db; color: #3498db;
     }
     .tile-btn.active {
@@ -103,7 +102,6 @@
       color: #fff;
       box-shadow: 0 2px 10px rgba(52, 152, 219, 0.35);
     }
-    .tile-btn:active { transform: scale(0.95); }
 
     .style-btn {
       padding: 5px 11px;
@@ -118,7 +116,7 @@
       box-shadow: 0 2px 8px rgba(230, 126, 34, 0.35);
     }
 
-    /* ===== 开源标注（整合进顶栏右侧） ===== */
+    /* ===== 开源标注 ===== */
     #project-badge {
       flex-shrink: 0;
       margin-left: auto;
@@ -141,13 +139,7 @@
       transition: color 0.15s ease;
       margin: 0 2px;
     }
-    #project-badge a:hover {
-      color: #2980b9;
-      text-decoration: underline;
-    }
-    #project-badge a:active {
-      color: #1f618d;
-    }
+    #project-badge a:hover { color: #2980b9; text-decoration: underline; }
 
     /* ===== 地图 ===== */
     #map {
@@ -164,7 +156,7 @@
       border-radius: 4px 0 0 0 !important;
     }
 
-    /* ===== 移动端 / 平板适配 ===== */
+    /* ===== 移动端适配 ===== */
     @media (max-width: 768px) {
       #control-bar { padding: 8px 10px; gap: 6px; }
       .tile-btn { padding: 6px 12px; font-size: 12px; min-height: 34px; }
@@ -173,19 +165,12 @@
       .brand-name { font-size: 13px; }
       .brand-name svg { width: 17px; height: 17px; }
       .leaflet-top { top: 54px !important; }
-
-      #project-badge {
-        font-size: 11px;
-        padding: 4px 8px;
-      }
+      #project-badge { font-size: 11px; padding: 4px 8px; }
     }
     @media (max-width: 480px) {
       #control-bar { gap: 5px; }
       .bar-label { display: none; }
-      #project-badge {
-        font-size: 10px;
-        padding: 3px 6px;
-      }
+      #project-badge { font-size: 10px; padding: 3px 6px; }
     }
     @media (min-width: 1024px) and (orientation: landscape) {
       #control-bar { padding: 12px 22px; gap: 12px; }
@@ -194,14 +179,10 @@
       .brand-name { font-size: 17px; }
       .brand-name svg { width: 22px; height: 22px; }
       .leaflet-top { top: 68px !important; }
-
-      #project-badge {
-        font-size: 13px;
-        padding: 6px 14px;
-      }
+      #project-badge { font-size: 13px; padding: 6px 14px; }
     }
 
-    /* 深色模式 */
+    /* ===== 深色模式（只影响顶栏 UI，不影响地图） ===== */
     @media (prefers-color-scheme: dark) {
       #control-bar {
         background: rgba(28, 28, 38, 0.92);
@@ -225,14 +206,12 @@
       .bar-divider { background: rgba(255,255,255,0.1); }
       .leaflet-control-attribution { background: rgba(0,0,0,0.6) !important; color: #aaa !important; }
       .leaflet-control-attribution a { color: #5dade2 !important; }
-
       #project-badge {
         background: rgba(255, 255, 255, 0.05);
         border-color: rgba(255, 255, 255, 0.1);
         color: #95a5a6;
       }
       #project-badge a { color: #5dade2; }
-      #project-badge a:hover { color: #3498db; }
     }
   </style>
 </head>
@@ -240,8 +219,6 @@
 
 <!-- ========== 顶部控制栏 ========== -->
 <div id="control-bar">
-
-  <!-- 项目名 -->
   <div class="brand-name">
     <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
     <span>Winged Maps</span>
@@ -271,11 +248,10 @@
     <button class="style-btn" data-tencent-style="satellite">卫星</button>
   </div>
 
-  <!-- 开源标注（顶栏内部最右侧） -->
+  <!-- 开源标注 -->
   <div id="project-badge">
     本项目是<a href="https://github.com/a-cathay-359/winged-maps" target="_blank" rel="noopener noreferrer">开源的</a>
   </div>
-
 </div>
 
 <!-- ========== 地图容器 ========== -->
@@ -286,11 +262,17 @@
 
 <script>
 /* ================================================================
-   一、瓦片源配置
+   一、系统深色模式检测（仅用于腾讯深色瓦片自动切换）
+   ================================================================ */
+const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+let isDarkMode = darkModeQuery.matches;
+
+/* ================================================================
+   二、瓦片源配置
    ================================================================ */
 const AMAP_SUBDOMAINS = ['1','2','3','4'];
 
-/* ---------- 高德：免密钥，国内直连 ---------- */
+/* ---------- 高德：亮色，风格固定 ---------- */
 const amapLayers = {
   normal: L.tileLayer(
     'https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=7',
@@ -312,7 +294,7 @@ const amapLayers = {
   ])
 };
 
-/* ---------- 腾讯：自定义卫星图层类，处理 Y 轴翻转 + 16×16 分块 ---------- */
+/* ---------- 腾讯：标准(亮)/深色/卫星 ---------- */
 const TencentSatelliteLayer = L.TileLayer.extend({
   getTileUrl: function (coords) {
     const z = coords.z;
@@ -327,7 +309,11 @@ const TencentSatelliteLayer = L.TileLayer.extend({
 
 const tencentLayers = {
   normal: L.tileLayer(
-    'https://rt{s}.map.gtimg.com/realtimerender?z={z}&x={x}&y={-y}&type=vector&style=0',
+    'https://rt{s}.map.gtimg.com/tile?z={z}&x={x}&y={-y}&styleid=0&version=256',
+    { subdomains: '0123', maxZoom: 18, attribution: '&copy; <a href="https://map.qq.com/">腾讯地图</a>' }
+  ),
+  dark: L.tileLayer(
+    'https://rt{s}.map.gtimg.com/tile?z={z}&x={x}&y={-y}&styleid=4&version=256',
     { subdomains: '0123', maxZoom: 18, attribution: '&copy; <a href="https://map.qq.com/">腾讯地图</a>' }
   ),
   satellite: new TencentSatelliteLayer('', {
@@ -337,7 +323,7 @@ const tencentLayers = {
   })
 };
 
-/* ---------- Esri 卫星影像：免密钥，全球覆盖 ---------- */
+/* ---------- Esri 卫星影像 ---------- */
 const esriLayers = {
   imagery: L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -349,7 +335,7 @@ const esriLayers = {
 };
 
 /* ================================================================
-   二、状态管理
+   三、状态管理
    ================================================================ */
 let currentProvider = 'amap';
 let currentAmapStyle = 'normal';
@@ -357,9 +343,18 @@ let currentTencentStyle = 'normal';
 let activeLayer = null;
 
 function getTargetLayer() {
-  if (currentProvider === 'amap')      return amapLayers[currentAmapStyle];
-  if (currentProvider === 'tencent')   return tencentLayers[currentTencentStyle];
-  if (currentProvider === 'esri')      return esriLayers.imagery;
+  if (currentProvider === 'amap') {
+    // 高德：亮色，不做深色自动切换（避免加载失败黑屏）
+    return amapLayers[currentAmapStyle] || amapLayers.normal;
+  }
+  if (currentProvider === 'tencent') {
+    if (currentTencentStyle === 'normal') {
+      // 腾讯标准：根据系统主题自动切换亮色/深色
+      return isDarkMode ? tencentLayers.dark : tencentLayers.normal;
+    }
+    return tencentLayers[currentTencentStyle];
+  }
+  if (currentProvider === 'esri') return esriLayers.imagery;
   return amapLayers.normal;
 }
 
@@ -376,7 +371,7 @@ function updateStyleBarVisibility() {
 }
 
 /* ================================================================
-   三、初始化地图
+   四、初始化地图
    ================================================================ */
 const map = L.map('map', {
   center: [35.86, 104.19],
@@ -391,7 +386,18 @@ L.control.zoom({ position: 'bottomright' }).addTo(map);
 L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
 
 /* ================================================================
-   四、事件绑定
+   五、系统深色模式变化监听（仅腾讯标准响应）
+   ================================================================ */
+darkModeQuery.addEventListener('change', (e) => {
+  isDarkMode = e.matches;
+
+  if (currentProvider === 'tencent' && currentTencentStyle === 'normal') {
+    switchLayer();
+  }
+});
+
+/* ================================================================
+   六、事件绑定
    ================================================================ */
 
 /* 主瓦片源切换 */
@@ -442,13 +448,13 @@ document.querySelectorAll('.style-btn[data-tencent-style]').forEach(btn => {
 });
 
 /* ================================================================
-   五、响应式刷新
+   七、响应式刷新
    ================================================================ */
 window.addEventListener('resize', () => map.invalidateSize());
 window.addEventListener('orientationchange', () => setTimeout(() => map.invalidateSize(), 300));
 
 /* ================================================================
-   六、趣味交互：点击地图显示坐标
+   八、点击地图显示坐标
    ================================================================ */
 const popup = L.popup();
 map.on('click', function (e) {
