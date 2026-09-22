@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>多源地图 · Leaflet</title>
+  <title>Winged Maps</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -58,11 +58,29 @@
       flex-shrink: 0; user-select: none;
     }
 
+    /* ===== 项目名（顶栏左侧） ===== */
+    .brand-name {
+      font-size: 15px;
+      font-weight: 800;
+      color: #2c3e50;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .brand-name svg {
+      width: 20px;
+      height: 20px;
+      fill: #3498db;
+    }
+
     /* ===== 瓦片按钮 ===== */
     .tile-btn {
       flex-shrink: 0;
-      padding: 7px 15px;
-      border: 1.5px solid rgba(0, 0, 0, 0.12);
+      padding: 7px 0 15px;
+      border: 1.5px solid rgba.(0, 0, 0, 0.12);
       border-radius: 20px;
       background: rgba(255, 255, 255, 0.75);
       color: #444;
@@ -77,7 +95,7 @@
       line-height: 1;
     }
     .tile-btn:hover {
-      background: rgba(52, 152, 219, 0.1);
+      background: rgba(52, 152, 219,1);
       border-color: #3498db; color: #3498db;
     }
     .tile-btn.active {
@@ -103,7 +121,7 @@
     /* ===== 开源标注（整合进顶栏右侧） ===== */
     #project-badge {
       flex-shrink: 0;
-      margin-left: auto; /* 让它在宽屏时自动靠右 */
+      margin-left: auto;
       font-size: 12px;
       line-height: 1.4;
       color: #7f8c8d;
@@ -152,6 +170,8 @@
       .tile-btn { padding: 6px 12px; font-size: 12px; min-height: 34px; }
       .style-btn { padding: 4px 9px; font-size: 11px; min-height: 28px; }
       .bar-label { font-size: 11px; }
+      .brand-name { font-size: 13px; }
+      .brand-name svg { width: 17px; height: 17px; }
       .leaflet-top { top: 54px !important; }
 
       #project-badge {
@@ -171,6 +191,8 @@
       #control-bar { padding: 12px 22px; gap: 12px; }
       .tile-btn { padding: 8px 18px; font-size: 14px; min-height: 40px; }
       .style-btn { padding: 6px 14px; font-size: 13px; min-height: 34px; }
+      .brand-name { font-size: 17px; }
+      .brand-name svg { width: 22px; height: 22px; }
       .leaflet-top { top: 68px !important; }
 
       #project-badge {
@@ -186,6 +208,8 @@
         border-bottom-color: rgba(255, 255, 255, 0.08);
       }
       .bar-label { color: #7f8c8d; }
+      .brand-name { color: #e0e0e0; }
+      .brand-name svg { fill: #5dade2; }
       .tile-btn {
         background: rgba(255, 255, 255, 0.08);
         border-color: rgba(255, 255, 255, 0.15);
@@ -217,6 +241,14 @@
 <!-- ========== 顶部控制栏 ========== -->
 <div id="control-bar">
 
+  <!-- 项目名 -->
+  <div class="brand-name">
+    <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+    <span>Winged Maps</span>
+  </div>
+
+  <div class="bar-divider"></div>
+
   <div class="bar-group">
     <span class="bar-label">瓦片源</span>
     <button class="tile-btn active" data-provider="amap">高德地图</button>
@@ -239,7 +271,7 @@
     <button class="style-btn" data-tencent-style="satellite">卫星</button>
   </div>
 
-  <!-- 开源标注（移到顶栏内部最右侧） -->
+  <!-- 开源标注（顶栏内部最右侧） -->
   <div id="project-badge">
     本项目是<a href="https://github.com/a-cathay-359/winged-maps" target="_blank" rel="noopener noreferrer">开源的</a>
   </div>
