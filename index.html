@@ -100,6 +100,37 @@
       box-shadow: 0 2px 8px rgba(230, 126, 34, 0.35);
     }
 
+    /* ===== 开源标注（整合进顶栏右侧） ===== */
+    #project-badge {
+      flex-shrink: 0;
+      margin-left: auto; /* 让它在宽屏时自动靠右 */
+      font-size: 12px;
+      line-height: 1.4;
+      color: #7f8c8d;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      white-space: nowrap;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    #project-badge a {
+      color: #3498db;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.15s ease;
+      margin: 0 2px;
+    }
+    #project-badge a:hover {
+      color: #2980b9;
+      text-decoration: underline;
+    }
+    #project-badge a:active {
+      color: #1f618d;
+    }
+
     /* ===== 地图 ===== */
     #map {
       position: absolute;
@@ -122,16 +153,30 @@
       .style-btn { padding: 4px 9px; font-size: 11px; min-height: 28px; }
       .bar-label { font-size: 11px; }
       .leaflet-top { top: 54px !important; }
+
+      #project-badge {
+        font-size: 11px;
+        padding: 4px 8px;
+      }
     }
     @media (max-width: 480px) {
       #control-bar { gap: 5px; }
       .bar-label { display: none; }
+      #project-badge {
+        font-size: 10px;
+        padding: 3px 6px;
+      }
     }
     @media (min-width: 1024px) and (orientation: landscape) {
       #control-bar { padding: 12px 22px; gap: 12px; }
       .tile-btn { padding: 8px 18px; font-size: 14px; min-height: 40px; }
       .style-btn { padding: 6px 14px; font-size: 13px; min-height: 34px; }
       .leaflet-top { top: 68px !important; }
+
+      #project-badge {
+        font-size: 13px;
+        padding: 6px 14px;
+      }
     }
 
     /* 深色模式 */
@@ -156,6 +201,14 @@
       .bar-divider { background: rgba(255,255,255,0.1); }
       .leaflet-control-attribution { background: rgba(0,0,0,0.6) !important; color: #aaa !important; }
       .leaflet-control-attribution a { color: #5dade2 !important; }
+
+      #project-badge {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #95a5a6;
+      }
+      #project-badge a { color: #5dade2; }
+      #project-badge a:hover { color: #3498db; }
     }
   </style>
 </head>
@@ -184,6 +237,11 @@
   <div class="bar-group" id="style-group-tencent" style="display:none;">
     <button class="style-btn active" data-tencent-style="normal">标准</button>
     <button class="style-btn" data-tencent-style="satellite">卫星</button>
+  </div>
+
+  <!-- 开源标注（移到顶栏内部最右侧） -->
+  <div id="project-badge">
+    本项目是<a href="https://github.com/a-cathay-359/winged-maps" target="_blank" rel="noopener noreferrer">开源的</a>
   </div>
 
 </div>
