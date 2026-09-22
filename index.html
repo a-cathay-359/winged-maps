@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>国内多源地图 · Leaflet</title>
+  <title>多源地图 · Leaflet</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -17,7 +17,7 @@
       -webkit-text-size-adjust: 100%;
     }
 
-    /* ===== 顶部控制栏（固定，可横向滚动） ===== */
+    /* ===== 顶部控制栏 ===== */
     #control-bar {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -48,19 +48,14 @@
       flex-shrink: 0;
     }
     .bar-divider {
-      width: 1px;
-      height: 24px;
+      width: 1px; height: 24px;
       background: rgba(0, 0, 0, 0.12);
-      flex-shrink: 0;
-      margin: 0 2px;
+      flex-shrink: 0; margin: 0 2px;
     }
     .bar-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: #95a5a6;
-      letter-spacing: 0.5px;
-      flex-shrink: 0;
-      user-select: none;
+      font-size: 12px; font-weight: 700;
+      color: #95a5a6; letter-spacing: 0.5px;
+      flex-shrink: 0; user-select: none;
     }
 
     /* ===== 瓦片按钮 ===== */
@@ -71,33 +66,27 @@
       border-radius: 20px;
       background: rgba(255, 255, 255, 0.75);
       color: #444;
-      font-size: 13px;
-      font-weight: 500;
+      font-size: 13px; font-weight: 500;
       cursor: pointer;
       transition: all 0.18s ease;
       -webkit-tap-highlight-color: transparent;
-      user-select: none;
-      white-space: nowrap;
+      user-select: none; white-space: nowrap;
       min-height: 36px;
       display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      align-items: center; justify-content: center;
       line-height: 1;
     }
     .tile-btn:hover {
       background: rgba(52, 152, 219, 0.1);
-      border-color: #3498db;
-      color: #3498db;
+      border-color: #3498db; color: #3498db;
     }
     .tile-btn.active {
-      background: #3498db;
-      border-color: #3498db;
+      background: #3498db; border-color: #3498db;
       color: #fff;
       box-shadow: 0 2px 10px rgba(52, 152, 219, 0.35);
     }
     .tile-btn:active { transform: scale(0.95); }
 
-    /* 风格子按钮（小一号，圆角略方） */
     .style-btn {
       padding: 5px 11px;
       font-size: 12px;
@@ -107,8 +96,7 @@
       background: rgba(245, 245, 245, 0.9);
     }
     .style-btn.active {
-      background: #e67e22;
-      border-color: #e67e22;
+      background: #e67e22; border-color: #e67e22;
       box-shadow: 0 2px 8px rgba(230, 126, 34, 0.35);
     }
 
@@ -119,7 +107,6 @@
       z-index: 1;
     }
 
-    /* 修正 Leaflet 控件位置，避开顶部栏 */
     .leaflet-top { top: 60px !important; }
     .leaflet-control-attribution {
       font-size: 10px !important;
@@ -177,34 +164,26 @@
 <!-- ========== 顶部控制栏 ========== -->
 <div id="control-bar">
 
-  <!-- 主瓦片源 -->
   <div class="bar-group">
     <span class="bar-label">瓦片源</span>
     <button class="tile-btn active" data-provider="amap">高德地图</button>
     <button class="tile-btn" data-provider="tencent">腾讯地图</button>
-    <button class="tile-btn" data-provider="tianditu">天地图</button>
+    <button class="tile-btn" data-provider="esri">Esri 卫星</button>
   </div>
 
   <div class="bar-divider"></div>
 
-  <!-- 高德风格开关 -->
+  <!-- 高德风格 -->
   <div class="bar-group" id="style-group-amap">
     <button class="style-btn active" data-amap-style="normal">标准</button>
     <button class="style-btn" data-amap-style="satellite">卫星</button>
     <button class="style-btn" data-amap-style="hybrid">卫星+路网</button>
   </div>
 
-  <!-- 腾讯风格开关（默认隐藏） -->
+  <!-- 腾讯风格 -->
   <div class="bar-group" id="style-group-tencent" style="display:none;">
     <button class="style-btn active" data-tencent-style="normal">标准</button>
     <button class="style-btn" data-tencent-style="satellite">卫星</button>
-  </div>
-
-  <!-- 天地图风格开关（默认隐藏） -->
-  <div class="bar-group" id="style-group-tianditu" style="display:none;">
-    <button class="style-btn active" data-tianditu-style="vector">矢量</button>
-    <button class="style-btn" data-tianditu-style="imagery">影像</button>
-    <button class="style-btn" data-tianditu-style="terrain">地形</button>
   </div>
 
 </div>
@@ -215,17 +194,13 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-<!-- ========== Leaflet.ChineseTmsProviders（可选，用于坐标纠正；也可手动处理） ========== -->
-<!-- 如果你需要叠加 Marker 且要求高精度，建议引入此插件；仅浏览底图可不引 -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/leaflet.chinatmsproviders@2.0.3/src/leaflet.ChineseTmsProviders.js"></script> -->
-
 <script>
 /* ================================================================
    一、瓦片源配置
    ================================================================ */
 const AMAP_SUBDOMAINS = ['1','2','3','4'];
 
-// 高德 —— 同一服务三种风格，全部免密钥
+/* ---------- 高德：免密钥，国内直连 ---------- */
 const amapLayers = {
   normal: L.tileLayer(
     'https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=7',
@@ -247,71 +222,57 @@ const amapLayers = {
   ])
 };
 
-// 腾讯 —— 注意 y 取反
+/* ---------- 腾讯：自定义卫星图层类，处理 Y 轴翻转 + 16×16 分块 ---------- */
+const TencentSatelliteLayer = L.TileLayer.extend({
+  getTileUrl: function (coords) {
+    const z = coords.z;
+    const reverseY = (1 << z) - 1 - coords.y;
+    const sx = coords.x >> 4;
+    const sy = reverseY >> 4;
+    const subdomains = this.options.subdomains || '0123';
+    const s = subdomains[(coords.x + coords.y) % subdomains.length];
+    return `https://p${s}.map.gtimg.com/sateTiles/${z}/${sx}/${sy}/${coords.x}_${reverseY}.jpg`;
+  }
+});
+
 const tencentLayers = {
   normal: L.tileLayer(
     'https://rt{s}.map.gtimg.com/realtimerender?z={z}&x={x}&y={-y}&type=vector&style=0',
     { subdomains: '0123', maxZoom: 18, attribution: '&copy; <a href="https://map.qq.com/">腾讯地图</a>' }
   ),
-  satellite: L.tileLayer(
-    'https://p{s}.map.gtimg.com/sateTiles/{z}/{x}/{y}.jpg',
-    { subdomains: '0123', maxZoom: 18, attribution: '&copy; <a href="https://map.qq.com/">腾讯地图</a>' }
-  )
+  satellite: new TencentSatelliteLayer('', {
+    subdomains: '0123',
+    maxZoom: 18,
+    attribution: '&copy; <a href="https://map.qq.com/">腾讯地图</a>'
+  })
 };
 
-// 天地图 —— 需替换 tk 为你在 lbs.tianditu.gov.cn 申请的免费 Key
-const TIANDITU_KEY = 'YOUR_TIANDITU_KEY'; // ← 请替换
-const tiandituLayers = {
-  vector: L.layerGroup([
-    L.tileLayer(
-      `https://t{s}.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=${TIANDITU_KEY}`,
-      { subdomains: '01234567', maxZoom: 18 }
-    ),
-    L.tileLayer(
-      `https://t{s}.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=${TIANDITU_KEY}`,
-      { subdomains: '01234567', maxZoom: 18 }
-    )
-  ]),
-  imagery: L.layerGroup([
-    L.tileLayer(
-      `https://t{s}.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=${TIANDITU_KEY}`,
-      { subdomains: '01234567', maxZoom: 18 }
-    ),
-    L.tileLayer(
-      `https://t{s}.tianditu.gov.cn/cia_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=${TIANDITU_KEY}`,
-      { subdomains: '01234567', maxZoom: 18 }
-    )
-  ]),
-  terrain: L.layerGroup([
-    L.tileLayer(
-      `https://t{s}.tianditu.gov.cn/ter_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ter&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=${TIANDITU_KEY}`,
-      { subdomains: '01234567', maxZoom: 18 }
-    ),
-    L.tileLayer(
-      `https://t{s}.tianditu.gov.cn/cta_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cta&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=${TIANDITU_KEY}`,
-      { subdomains: '01234567', maxZoom: 18 }
-    )
-  ])
+/* ---------- Esri 卫星影像：免密钥，全球覆盖 ---------- */
+const esriLayers = {
+  imagery: L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {
+      maxZoom: 19,
+      attribution: 'Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; Source: Esri, Maxar, Earthstar Geographics'
+    }
+  )
 };
 
 /* ================================================================
    二、状态管理
    ================================================================ */
-let currentProvider = 'amap';          // amap | tencent | tianditu
+let currentProvider = 'amap';
 let currentAmapStyle = 'normal';
 let currentTencentStyle = 'normal';
-let currentTiandituStyle = 'vector';
-let activeLayer = null;                // 当前挂载到地图上的图层
+let activeLayer = null;
 
-/* 根据当前 provider + style 获取应显示的 Layer */
 function getTargetLayer() {
   if (currentProvider === 'amap')      return amapLayers[currentAmapStyle];
   if (currentProvider === 'tencent')   return tencentLayers[currentTencentStyle];
-  if (currentProvider === 'tianditu')  return tiandituLayers[currentTiandituStyle];
+  if (currentProvider === 'esri')      return esriLayers.imagery;
   return amapLayers.normal;
 }
 
-/* 切换图层 */
 function switchLayer() {
   const target = getTargetLayer();
   if (activeLayer && map.hasLayer(activeLayer)) map.removeLayer(activeLayer);
@@ -319,20 +280,18 @@ function switchLayer() {
   activeLayer = target;
 }
 
-/* 显示/隐藏风格子栏 */
 function updateStyleBarVisibility() {
   document.getElementById('style-group-amap').style.display     = currentProvider === 'amap'     ? 'flex' : 'none';
   document.getElementById('style-group-tencent').style.display  = currentProvider === 'tencent'  ? 'flex' : 'none';
-  document.getElementById('style-group-tianditu').style.display = currentProvider === 'tianditu' ? 'flex' : 'none';
 }
 
 /* ================================================================
    三、初始化地图
    ================================================================ */
 const map = L.map('map', {
-  center: [35.86, 104.19],  // 中国地理中心附近
+  center: [35.86, 104.19],
   zoom: 5,
-  layers: [amapLayers.normal],  // 默认高德标准
+  layers: [amapLayers.normal],
   zoomControl: false,
   attributionControl: true
 });
@@ -345,7 +304,7 @@ L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
    四、事件绑定
    ================================================================ */
 
-/* --- 主瓦片源切换 --- */
+/* 主瓦片源切换 */
 document.querySelectorAll('.tile-btn[data-provider]').forEach(btn => {
   btn.addEventListener('click', function () {
     const provider = this.dataset.provider;
@@ -362,7 +321,7 @@ document.querySelectorAll('.tile-btn[data-provider]').forEach(btn => {
   });
 });
 
-/* --- 高德风格切换 --- */
+/* 高德风格切换 */
 document.querySelectorAll('.style-btn[data-amap-style]').forEach(btn => {
   btn.addEventListener('click', function () {
     const style = this.dataset.amapStyle;
@@ -377,7 +336,7 @@ document.querySelectorAll('.style-btn[data-amap-style]').forEach(btn => {
   });
 });
 
-/* --- 腾讯风格切换 --- */
+/* 腾讯风格切换 */
 document.querySelectorAll('.style-btn[data-tencent-style]').forEach(btn => {
   btn.addEventListener('click', function () {
     const style = this.dataset.tencentStyle;
@@ -388,21 +347,6 @@ document.querySelectorAll('.style-btn[data-tencent-style]').forEach(btn => {
     this.classList.add('active');
 
     if (currentProvider === 'tencent') switchLayer();
-    if (navigator.vibrate) navigator.vibrate(8);
-  });
-});
-
-/* --- 天地图风格切换 --- */
-document.querySelectorAll('.style-btn[data-tianditu-style]').forEach(btn => {
-  btn.addEventListener('click', function () {
-    const style = this.dataset.tiandituStyle;
-    if (style === currentTiandituStyle) return;
-    currentTiandituStyle = style;
-
-    document.querySelectorAll('.style-btn[data-tianditu-style]').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-
-    if (currentProvider === 'tianditu') switchLayer();
     if (navigator.vibrate) navigator.vibrate(8);
   });
 });
