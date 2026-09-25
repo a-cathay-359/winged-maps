@@ -58,7 +58,6 @@
       flex-shrink: 0; user-select: none;
     }
 
-    /* ===== 品牌名 ===== */
     .brand-name {
       font-size: 15px;
       font-weight: 800;
@@ -70,12 +69,8 @@
       align-items: center;
       gap: 6px;
     }
-    .brand-name svg {
-      width: 20px; height: 20px;
-      fill: #3498db;
-    }
+    .brand-name svg { width: 20px; height: 20px; fill: #3498db; }
 
-    /* ===== 瓦片按钮 ===== */
     .tile-btn {
       flex-shrink: 0;
       padding: 7px 15px;
@@ -116,7 +111,6 @@
       box-shadow: 0 2px 8px rgba(230, 126, 34, 0.35);
     }
 
-    /* ===== 开源标注 ===== */
     #project-badge {
       flex-shrink: 0;
       margin-left: auto;
@@ -136,12 +130,10 @@
       color: #3498db;
       font-weight: 600;
       text-decoration: none;
-      transition: color 0.15s ease;
       margin: 0 2px;
     }
     #project-badge a:hover { color: #2980b9; text-decoration: underline; }
 
-    /* ===== 地图 ===== */
     #map {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -156,7 +148,35 @@
       border-radius: 4px 0 0 0 !important;
     }
 
-    /* ===== 移动端适配 ===== */
+    .coord-popup {
+      font-size: 12px;
+      line-height: 1.8;
+      min-width: 200px;
+    }
+    .coord-popup .coord-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #2c3e50;
+    }
+    .coord-popup .coord-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .coord-popup .coord-label {
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .coord-popup .gcj { color: #e67e22; }
+    .coord-popup .wgs { color: #27ae60; }
+    .coord-popup .coord-note {
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed rgba(0,0,0,0.15);
+      font-size: 11px;
+      color: #7f8c8d;
+    }
+
     @media (max-width: 768px) {
       #control-bar { padding: 8px 10px; gap: 6px; }
       .tile-btn { padding: 6px 12px; font-size: 12px; min-height: 34px; }
@@ -182,7 +202,6 @@
       #project-badge { font-size: 13px; padding: 6px 14px; }
     }
 
-    /* ===== 深色模式（只影响顶栏 UI，不影响地图） ===== */
     @media (prefers-color-scheme: dark) {
       #control-bar {
         background: rgba(28, 28, 38, 0.92);
@@ -217,7 +236,6 @@
 </head>
 <body>
 
-<!-- ========== 顶部控制栏 ========== -->
 <div id="control-bar">
   <div class="brand-name">
     <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
@@ -235,26 +253,22 @@
 
   <div class="bar-divider"></div>
 
-  <!-- 高德风格 -->
   <div class="bar-group" id="style-group-amap">
     <button class="style-btn active" data-amap-style="normal">标准</button>
     <button class="style-btn" data-amap-style="satellite">卫星</button>
     <button class="style-btn" data-amap-style="hybrid">卫星+路网</button>
   </div>
 
-  <!-- 腾讯风格 -->
   <div class="bar-group" id="style-group-tencent" style="display:none;">
     <button class="style-btn active" data-tencent-style="normal">标准</button>
     <button class="style-btn" data-tencent-style="satellite">卫星</button>
   </div>
 
-  <!-- 开源标注 -->
   <div id="project-badge">
     本项目是<a href="https://github.com/a-cathay-359/winged-maps" target="_blank" rel="noopener noreferrer">开源的</a>
   </div>
 </div>
 
-<!-- ========== 地图容器 ========== -->
 <div id="map"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -262,25 +276,77 @@
 
 <script>
 /* ================================================================
-   一、系统深色模式检测（仅用于腾讯深色瓦片自动切换）
+   一、坐标系转换工具（GCJ-02 ↔ WGS-84）
+   ================================================================ */
+const PI = 3.1415926535897932384626;
+const A = 6378245.0;
+const EE = 0.00669342162296594323;
+
+function outOfChina(lng, lat) {
+  return (lng < 72.004 || lng > 137.8347) || (lat < 0.8293 || lat > 55.8271);
+}
+
+function transformLat(x, y) {
+  let ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y + 0.2 * Math.sqrt(Math.abs(x));
+  ret += (20.0 * Math.sin(6.0 * x * PI) + 20.0 * Math.sin(2.0 * x * PI)) * 2.0 / 3.0;
+  ret += (20.0 * Math.sin(y * PI) + 40.0 * Math.sin(y / 3.0 * PI)) * 2.0 / 3.0;
+  ret += (160.0 * Math.sin(y / 12.0 * PI) + 320 * Math.sin(y * PI / 30.0)) * 2.0 / 3.0;
+  return ret;
+}
+
+function transformLng(x, y) {
+  let ret = 300.0 + x + 2.0 * y + 0.1 * x * x + 0.1 * x * y + 0.1 * Math.sqrt(Math.abs(x));
+  ret += (20.0 * Math.sin(6.0 * x * PI) + 20.0 * Math.sin(2.0 * x * PI)) * 2.0 / 3.0;
+  ret += (20.0 * Math.sin(x * PI) + 40.0 * Math.sin(x / 3.0 * PI)) * 2.0 / 3.0;
+  ret += (150.0 * Math.sin(x / 12.0 * PI) + 300.0 * Math.sin(x / 30.0 * PI)) * 2.0 / 3.0;
+  return ret;
+}
+
+function wgs84ToGcj02(lng, lat) {
+  if (outOfChina(lng, lat)) return [lng, lat];
+  let dlat = transformLat(lng - 105.0, lat - 35.0);
+  let dlng = transformLng(lng - 105.0, lat - 35.0);
+  const radlat = lat / 180.0 * PI;
+  let magic = Math.sin(radlat);
+  magic = 1 - EE * magic * magic;
+  const sqrtmagic = Math.sqrt(magic);
+  dlat = (dlat * 180.0) / ((A * (1 - EE)) / (magic * sqrtmagic) * PI);
+  dlng = (dlng * 180.0) / (A / sqrtmagic * Math.cos(radlat) * PI);
+  return [lng + dlng, lat + dlat];
+}
+
+function gcj02ToWgs84(lng, lat) {
+  if (outOfChina(lng, lat)) return [lng, lat];
+  let dlat = transformLat(lng - 105.0, lat - 35.0);
+  let dlng = transformLng(lng - 105.0, lat - 35.0);
+  const radlat = lat / 180.0 * PI;
+  let magic = Math.sin(radlat);
+  magic = 1 - EE * magic * magic;
+  const sqrtmagic = Math.sqrt(magic);
+  dlat = (dlat * 180.0) / ((A * (1 - EE)) / (magic * sqrtmagic) * PI);
+  dlng = (dlng * 180.0) / (A / sqrtmagic * Math.cos(radlat) * PI);
+  return [lng * 2 - (lng + dlng), lat * 2 - (lat + dlat)];
+}
+
+/* ================================================================
+   二、系统深色模式检测
    ================================================================ */
 const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 let isDarkMode = darkModeQuery.matches;
 
 /* ================================================================
-   二、瓦片源配置
+   三、瓦片源配置
    ================================================================ */
 const AMAP_SUBDOMAINS = ['1','2','3','4'];
 
-/* ---------- 高德：亮色，风格固定 ---------- */
 const amapLayers = {
   normal: L.tileLayer(
     'https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=7',
-    { subdomains: AMAP_SUBDOMAINS, maxZoom: 18, attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>' }
+    { subdomains: AMAP_SUBDOMAINS, maxZoom: 18, attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> [GCJ-02]' }
   ),
   satellite: L.tileLayer(
     'https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-    { subdomains: AMAP_SUBDOMAINS, maxZoom: 18, attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>' }
+    { subdomains: AMAP_SUBDOMAINS, maxZoom: 18, attribution: '&copy; <a href="https://www.amap.com/">高德地图</a> [GCJ-02]' }
   ),
   hybrid: L.layerGroup([
     L.tileLayer(
@@ -294,7 +360,6 @@ const amapLayers = {
   ])
 };
 
-/* ---------- 腾讯：标准(亮)/深色/卫星 ---------- */
 const TencentSatelliteLayer = L.TileLayer.extend({
   getTileUrl: function (coords) {
     const z = coords.z;
@@ -310,32 +375,31 @@ const TencentSatelliteLayer = L.TileLayer.extend({
 const tencentLayers = {
   normal: L.tileLayer(
     'https://rt{s}.map.gtimg.com/tile?z={z}&x={x}&y={-y}&styleid=0&version=256',
-    { subdomains: '0123', maxZoom: 18, attribution: '&copy; <a href="https://map.qq.com/">腾讯地图</a>' }
+    { subdomains: '0123', maxZoom: 18, attribution: '&copy; <a href="https://map.qq.com/">腾讯地图</a> [GCJ-02]' }
   ),
   dark: L.tileLayer(
     'https://rt{s}.map.gtimg.com/tile?z={z}&x={x}&y={-y}&styleid=4&version=256',
-    { subdomains: '0123', maxZoom: 18, attribution: '&copy; <a href="https://map.qq.com/">腾讯地图</a>' }
+    { subdomains: '0123', maxZoom: 18, attribution: '&copy; <a href="https://map.qq.com/">腾讯地图</a> [GCJ-02]' }
   ),
   satellite: new TencentSatelliteLayer('', {
     subdomains: '0123',
     maxZoom: 18,
-    attribution: '&copy; <a href="https://map.qq.com/">腾讯地图</a>'
+    attribution: '&copy; <a href="https://map.qq.com/">腾讯地图</a> [GCJ-02]'
   })
 };
 
-/* ---------- Esri 卫星影像 ---------- */
 const esriLayers = {
   imagery: L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     {
       maxZoom: 19,
-      attribution: 'Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; Source: Esri, Maxar, Earthstar Geographics'
+      attribution: 'Tiles &copy; <a href="https://www.esri.com/">Esri</a> [WGS-84]'
     }
   )
 };
 
 /* ================================================================
-   三、状态管理
+   四、状态管理
    ================================================================ */
 let currentProvider = 'amap';
 let currentAmapStyle = 'normal';
@@ -343,18 +407,12 @@ let currentTencentStyle = 'normal';
 let activeLayer = null;
 
 function getTargetLayer() {
-  if (currentProvider === 'amap') {
-    // 高德：亮色，不做深色自动切换（避免加载失败黑屏）
-    return amapLayers[currentAmapStyle] || amapLayers.normal;
-  }
+  if (currentProvider === 'amap')      return amapLayers[currentAmapStyle] || amapLayers.normal;
   if (currentProvider === 'tencent') {
-    if (currentTencentStyle === 'normal') {
-      // 腾讯标准：根据系统主题自动切换亮色/深色
-      return isDarkMode ? tencentLayers.dark : tencentLayers.normal;
-    }
+    if (currentTencentStyle === 'normal') return isDarkMode ? tencentLayers.dark : tencentLayers.normal;
     return tencentLayers[currentTencentStyle];
   }
-  if (currentProvider === 'esri') return esriLayers.imagery;
+  if (currentProvider === 'esri')      return esriLayers.imagery;
   return amapLayers.normal;
 }
 
@@ -370,15 +428,23 @@ function updateStyleBarVisibility() {
   document.getElementById('style-group-tencent').style.display  = currentProvider === 'tencent'  ? 'flex' : 'none';
 }
 
+function getCurrentCRS() {
+  return currentProvider === 'esri' ? 'WGS-84' : 'GCJ-02';
+}
+
 /* ================================================================
-   四、初始化地图
+   五、初始化地图（已加边界限制，防止无限滑动）
    ================================================================ */
 const map = L.map('map', {
   center: [35.86, 104.19],
   zoom: 5,
   layers: [amapLayers.normal],
   zoomControl: false,
-  attributionControl: true
+  attributionControl: true,
+  // 限制地图可拖动范围，防止左右无限循环出现多个中国
+  maxBounds: [[-85, -180], [85, 180]],
+  // 边界粘性：1.0 表示滑到边界直接停住，不会弹性回弹
+  maxBoundsViscosity: 1.0
 });
 activeLayer = amapLayers.normal;
 
@@ -386,21 +452,18 @@ L.control.zoom({ position: 'bottomright' }).addTo(map);
 L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
 
 /* ================================================================
-   五、系统深色模式变化监听（仅腾讯标准响应）
+   六、系统深色模式监听（仅腾讯标准响应）
    ================================================================ */
 darkModeQuery.addEventListener('change', (e) => {
   isDarkMode = e.matches;
-
   if (currentProvider === 'tencent' && currentTencentStyle === 'normal') {
     switchLayer();
   }
 });
 
 /* ================================================================
-   六、事件绑定
+   七、事件绑定
    ================================================================ */
-
-/* 主瓦片源切换 */
 document.querySelectorAll('.tile-btn[data-provider]').forEach(btn => {
   btn.addEventListener('click', function () {
     const provider = this.dataset.provider;
@@ -417,7 +480,6 @@ document.querySelectorAll('.tile-btn[data-provider]').forEach(btn => {
   });
 });
 
-/* 高德风格切换 */
 document.querySelectorAll('.style-btn[data-amap-style]').forEach(btn => {
   btn.addEventListener('click', function () {
     const style = this.dataset.amapStyle;
@@ -432,7 +494,6 @@ document.querySelectorAll('.style-btn[data-amap-style]').forEach(btn => {
   });
 });
 
-/* 腾讯风格切换 */
 document.querySelectorAll('.style-btn[data-tencent-style]').forEach(btn => {
   btn.addEventListener('click', function () {
     const style = this.dataset.tencentStyle;
@@ -448,23 +509,49 @@ document.querySelectorAll('.style-btn[data-tencent-style]').forEach(btn => {
 });
 
 /* ================================================================
-   七、响应式刷新
+   八、响应式刷新
    ================================================================ */
 window.addEventListener('resize', () => map.invalidateSize());
 window.addEventListener('orientationchange', () => setTimeout(() => map.invalidateSize(), 300));
 
 /* ================================================================
-   八、点击地图显示坐标
+   九、点击地图显示双坐标系坐标
    ================================================================ */
-const popup = L.popup();
+const popup = L.popup({ maxWidth: 280, className: 'coord-popup' });
 map.on('click', function (e) {
+  const clickedLng = e.latlng.lng;
+  const clickedLat = e.latlng.lat;
+  const currentCRS = getCurrentCRS();
+
+  let gcjLng, gcjLat, wgsLng, wgsLat;
+
+  if (currentCRS === 'GCJ-02') {
+    gcjLng = clickedLng;
+    gcjLat = clickedLat;
+    [wgsLng, wgsLat] = gcj02ToWgs84(clickedLng, clickedLat);
+  } else {
+    wgsLng = clickedLng;
+    wgsLat = clickedLat;
+    [gcjLng, gcjLat] = wgs84ToGcj02(clickedLng, clickedLat);
+  }
+
   popup
     .setLatLng(e.latlng)
     .setContent(
-      `<div style="font-size:13px;line-height:1.7;min-width:140px;">
-        <b>📍 位置</b><br>
-        纬度：${e.latlng.lat.toFixed(5)}<br>
-        经度：${e.latlng.lng.toFixed(5)}
+      `<div class="coord-popup">
+        <div class="coord-title">📍 当前底图：${currentCRS}</div>
+        <div class="coord-row">
+          <span class="coord-label gcj">GCJ-02</span>
+          <span>${gcjLng.toFixed(5)}, ${gcjLat.toFixed(5)}</span>
+        </div>
+        <div class="coord-row">
+          <span class="coord-label wgs">WGS-84</span>
+          <span>${wgsLng.toFixed(5)}, ${wgsLat.toFixed(5)}</span>
+        </div>
+        <div class="coord-note">
+          两套坐标约差 100～700 米，取决于所在地区。<br>
+          高德/腾讯使用 GCJ-02，Esri 使用 WGS-84。
+        </div>
       </div>`
     )
     .openOn(map);
