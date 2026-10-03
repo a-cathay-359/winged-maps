@@ -148,6 +148,158 @@
       border-radius: 4px 0 0 0 !important;
     }
 
+    /* ===== 定位按钮（准星图标） ===== */
+    .locate-btn {
+      width: 40px;
+      height: 40px;
+      background: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+      transition: background 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
+      padding: 0;
+    }
+    .locate-btn:hover { background: #f5f5f5; }
+    .locate-btn:active { background: #eee; }
+    .locate-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: #333;
+      transition: fill 0.2s ease;
+    }
+    .locate-btn.locating svg {
+      fill: #3498db;
+      animation: spin 1s linear infinite;
+    }
+    .locate-btn.located svg {
+      fill: #3498db;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* 定位标记（脉冲蓝点） */
+    .user-marker { position: relative; }
+    .user-marker .pulse-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 30px; height: 30px;
+      margin: -15px 0 0 -15px;
+      border-radius: 50%;
+      background: rgba(52, 152, 219, 0.4);
+      animation: pulse 1.8s ease-out infinite;
+    }
+    .user-marker .dot {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 14px; height: 14px;
+      margin: -7px 0 0 -7px;
+      border-radius: 50%;
+      background: #3498db;
+      border: 2.5px solid #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+    @keyframes pulse {
+      0%   { transform: scale(0.6); opacity: 1; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    /* ===== 速度面板（底部中央） ===== */
+    #speed-panel {
+      position: fixed;
+      bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(14px) saturate(180%);
+      -webkit-backdrop-filter: blur(14px) saturate(180%);
+      padding: 7px 16px;
+      border-radius: 22px;
+      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    #speed-panel.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #speed-panel .speed-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #2c3e50;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      min-width: 50px;
+      text-align: right;
+      letter-spacing: -0.5px;
+    }
+    #speed-panel .speed-unit {
+      font-size: 11px;
+      color: #95a5a6;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      margin-right: 2px;
+    }
+    #speed-panel .speed-status {
+      font-size: 12px;
+      font-weight: 600;
+      color: #3498db;
+      padding: 3px 10px;
+      background: rgba(52, 152, 219, 0.12);
+      border-radius: 11px;
+      white-space: nowrap;
+      transition: color 0.25s ease, background 0.25s ease;
+    }
+    /* 状态颜色 */
+    #speed-panel.status-still .speed-value { color: #7f8c8d; }
+    #speed-panel.status-still .speed-status {
+      color: #7f8c8d;
+      background: rgba(127, 140, 141, 0.12);
+    }
+    #speed-panel.status-walk .speed-status {
+      color: #27ae60;
+      background: rgba(39, 174, 96, 0.12);
+    }
+    #speed-panel.status-run .speed-status {
+      color: #e67e22;
+      background: rgba(230, 126, 34, 0.12);
+    }
+    #speed-panel.status-drive .speed-status {
+      color: #e74c3c;
+      background: rgba(231, 76, 60, 0.12);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .locate-btn { background: #2c2c3a; }
+      .locate-btn:hover { background: #3a3a4a; }
+      .locate-btn:active { background: #444; }
+      .locate-btn svg { fill: #ddd; }
+      .locate-btn.locating svg,
+      .locate-btn.located svg { fill: #5dade2; }
+
+      #speed-panel {
+        background: rgba(40, 40, 52, 0.94);
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+      }
+      #speed-panel .speed-value { color: #e0e0e0; }
+      #speed-panel .speed-unit { color: #7f8c8d; }
+      #speed-panel.status-still .speed-value { color: #95a5a6; }
+    }
+
     .coord-popup {
       font-size: 12px;
       line-height: 1.8;
@@ -186,11 +338,15 @@
       .brand-name svg { width: 17px; height: 17px; }
       .leaflet-top { top: 54px !important; }
       #project-badge { font-size: 11px; padding: 4px 8px; }
+      #speed-panel .speed-value { font-size: 20px; min-width: 44px; }
     }
     @media (max-width: 480px) {
       #control-bar { gap: 5px; }
       .bar-label { display: none; }
       #project-badge { font-size: 10px; padding: 3px 6px; }
+      #speed-panel { padding: 6px 13px; gap: 6px; }
+      #speed-panel .speed-value { font-size: 18px; min-width: 40px; }
+      #speed-panel .speed-status { font-size: 11px; padding: 2px 8px; }
     }
     @media (min-width: 1024px) and (orientation: landscape) {
       #control-bar { padding: 12px 22px; gap: 12px; }
@@ -271,6 +427,13 @@
 
 <div id="map"></div>
 
+<!-- 速度面板 -->
+<div id="speed-panel">
+  <span class="speed-value">0.0</span>
+  <span class="speed-unit">km/h</span>
+  <span class="speed-status">静止</span>
+</div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
@@ -329,13 +492,27 @@ function gcj02ToWgs84(lng, lat) {
 }
 
 /* ================================================================
-   二、系统深色模式检测
+   二、Haversine 距离计算（返回米）
+   ================================================================ */
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const toRad = x => x * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+            Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+/* ================================================================
+   三、系统深色模式检测
    ================================================================ */
 const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 let isDarkMode = darkModeQuery.matches;
 
 /* ================================================================
-   三、瓦片源配置
+   四、瓦片源配置
    ================================================================ */
 const AMAP_SUBDOMAINS = ['1','2','3','4'];
 
@@ -399,12 +576,21 @@ const esriLayers = {
 };
 
 /* ================================================================
-   四、状态管理
+   五、状态管理
    ================================================================ */
 let currentProvider = 'amap';
 let currentAmapStyle = 'normal';
 let currentTencentStyle = 'normal';
 let activeLayer = null;
+let userMarker = null;
+let userWgsLng = null;
+let userWgsLat = null;
+
+let watchId = null;             // watchPosition 句柄
+let isFirstFix = true;          // 是否是首次定位
+let lastPos = null;             // { lat, lng, time } 上一次有效位置
+let currentSpeedMs = 0;         // 平滑后的速度（米/秒）
+let lastMarkerUpdate = 0;       // 上次标记更新时间（节流用）
 
 function getTargetLayer() {
   if (currentProvider === 'amap')      return amapLayers[currentAmapStyle] || amapLayers.normal;
@@ -421,6 +607,10 @@ function switchLayer() {
   if (activeLayer && map.hasLayer(activeLayer)) map.removeLayer(activeLayer);
   target.addTo(map);
   activeLayer = target;
+
+  if (userWgsLng !== null && userWgsLat !== null) {
+    placeUserMarker(userWgsLng, userWgsLat, false);
+  }
 }
 
 function updateStyleBarVisibility() {
@@ -433,7 +623,7 @@ function getCurrentCRS() {
 }
 
 /* ================================================================
-   五、初始化地图（已加边界限制，防止无限滑动）
+   六、初始化地图（带边界限制）
    ================================================================ */
 const map = L.map('map', {
   center: [35.86, 104.19],
@@ -441,9 +631,7 @@ const map = L.map('map', {
   layers: [amapLayers.normal],
   zoomControl: false,
   attributionControl: true,
-  // 限制地图可拖动范围，防止左右无限循环出现多个中国
   maxBounds: [[-85, -180], [85, 180]],
-  // 边界粘性：1.0 表示滑到边界直接停住，不会弹性回弹
   maxBoundsViscosity: 1.0
 });
 activeLayer = amapLayers.normal;
@@ -452,7 +640,260 @@ L.control.zoom({ position: 'bottomright' }).addTo(map);
 L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
 
 /* ================================================================
-   六、系统深色模式监听（仅腾讯标准响应）
+   七、定位功能（watchPosition 持续追踪 + 速度计算）
+   ================================================================ */
+
+/* 创建定位按钮 */
+const LocateControl = L.Control.extend({
+  options: { position: 'bottomright' },
+  onAdd: function () {
+    const btn = L.DomUtil.create('button', 'locate-btn');
+    btn.title = '定位到我的位置';
+
+    btn.innerHTML = `
+      <svg viewBox="0 0 24 24">
+        <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+      </svg>`;
+
+    L.DomEvent.disableClickPropagation(btn);
+    L.DomEvent.on(btn, 'click', function (e) {
+      L.DomEvent.stopPropagation(e);
+      // 已有位置：直接飞过去并放大
+      if (userWgsLng !== null && userWgsLat !== null) {
+        const coord = getDisplayCoord(userWgsLng, userWgsLat);
+        map.flyTo([coord.lat, coord.lng], 15, { duration: 1.2 });
+        if (userMarker) setTimeout(() => userMarker.openPopup(), 700);
+      } else {
+        // 还没有位置：启动追踪
+        startWatch();
+      }
+    });
+
+    this._btn = btn;
+    return btn;
+  }
+});
+
+map.addControl(new LocateControl());
+const locateButton = document.querySelector('.locate-btn');
+
+/* 启动持续位置追踪 */
+function startWatch() {
+  if (watchId !== null) return;
+  if (!navigator.geolocation) return;
+
+  if (locateButton) locateButton.classList.add('locating');
+
+  watchId = navigator.geolocation.watchPosition(
+    onPositionUpdate,
+    onPositionError,
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0
+    }
+  );
+}
+
+/* 位置更新回调 —— 每次位置变化都会触发 */
+function onPositionUpdate(position) {
+  const now = Date.now();
+  const wgsLng = position.coords.longitude;
+  const wgsLat = position.coords.latitude;
+  const accuracy = position.coords.accuracy;
+
+  userWgsLng = wgsLng;
+  userWgsLat = wgsLat;
+
+  // ---- 计算速度 ----
+  if (lastPos) {
+    const dt = (now - lastPos.time) / 1000;
+    if (dt >= 0.8) {  // 至少间隔 0.8 秒
+      const dist = haversine(lastPos.lat, lastPos.lng, wgsLat, wgsLng);
+
+      // 距离小于 1 米视为 GPS 漂移，不计入
+      let instantSpeed = 0;
+      if (dist >= 1) {
+        instantSpeed = dist / dt;   // 米/秒
+      }
+
+      // 指数移动平均，避免速度抖动
+      currentSpeedMs = currentSpeedMs * 0.5 + instantSpeed * 0.5;
+
+      // 速度极小值归零
+      if (currentSpeedMs < 0.3) currentSpeedMs = 0;
+
+      lastPos = { lat: wgsLat, lng: wgsLng, time: now };
+    }
+  } else {
+    lastPos = { lat: wgsLat, lng: wgsLng, time: now };
+    currentSpeedMs = 0;
+  }
+
+  // ---- 首次定位：flyTo 到用户位置（保持缩放） ----
+  if (isFirstFix) {
+    isFirstFix = false;
+    const displayCoord = getDisplayCoord(wgsLng, wgsLat);
+    map.flyTo([displayCoord.lat, displayCoord.lng], map.getZoom(), { duration: 1.5 });
+
+    if (locateButton) {
+      locateButton.classList.remove('locating');
+      locateButton.classList.add('located');
+    }
+  }
+
+  // ---- 更新地图标记（节流：最多每秒一次） ----
+  if (now - lastMarkerUpdate >= 800) {
+    lastMarkerUpdate = now;
+    placeUserMarker(wgsLng, wgsLat, false, accuracy);
+  }
+
+  // ---- 更新速度面板 ----
+  updateSpeedUI();
+}
+
+/* 定位错误回调 */
+function onPositionError(error) {
+  if (locateButton) locateButton.classList.remove('locating');
+  if (!isFirstFix) return;  // 首次成功后就不再弹窗
+
+  let msg = '定位失败：';
+  switch (error.code) {
+    case error.PERMISSION_DENIED:     msg += '你拒绝了定位权限'; break;
+    case error.POSITION_UNAVAILABLE:  msg += '位置信息不可用'; break;
+    case error.TIMEOUT:               msg += '定位超时'; break;
+    default:                          msg += '未知错误'; break;
+  }
+  // 只在用户主动点击时弹窗
+  if (isFirstFix) console.warn(msg);
+}
+
+/* ================================================================
+   八、速度面板 UI 更新
+   ================================================================ */
+const speedPanel = document.getElementById('speed-panel');
+const speedValueEl = speedPanel.querySelector('.speed-value');
+const speedStatusEl = speedPanel.querySelector('.speed-status');
+
+function updateSpeedUI() {
+  const kmh = currentSpeedMs * 3.6;
+
+  // 显示速度
+  speedValueEl.textContent = kmh < 1 ? '0.0' : kmh.toFixed(1);
+
+  // 判断状态
+  speedPanel.classList.remove('status-still', 'status-walk', 'status-run', 'status-drive');
+  let status = '静止';
+  if (kmh < 1) {
+    status = '静止';
+    speedPanel.classList.add('status-still');
+  } else if (kmh < 6) {
+    status = '步行';
+    speedPanel.classList.add('status-walk');
+  } else if (kmh < 25) {
+    status = '跑步/骑行';
+    speedPanel.classList.add('status-run');
+  } else {
+    status = '乘车';
+    speedPanel.classList.add('status-drive');
+  }
+  speedStatusEl.textContent = status;
+
+  // 首次有位置后显示面板
+  if (userWgsLng !== null) {
+    speedPanel.classList.add('visible');
+  }
+}
+
+/* ================================================================
+   九、坐标换算与标记
+   ================================================================ */
+function getDisplayCoord(wgsLng, wgsLat) {
+  if (currentProvider === 'esri') {
+    return { lng: wgsLng, lat: wgsLat, crs: 'WGS-84' };
+  } else {
+    const [gcjLng, gcjLat] = wgs84ToGcj02(wgsLng, wgsLat);
+    return { lng: gcjLng, lat: gcjLat, crs: 'GCJ-02' };
+  }
+}
+
+function placeUserMarker(wgsLng, wgsLat, showPopup, accuracy) {
+  const displayCoord = getDisplayCoord(wgsLng, wgsLat);
+
+  // 已存在标记：只更新位置，不重建（更流畅）
+  if (userMarker) {
+    userMarker.setLatLng([displayCoord.lat, displayCoord.lng]);
+
+    // 更新弹窗内容
+    const [gcjLng, gcjLat] = wgs84ToGcj02(wgsLng, wgsLat);
+    let accuracyText = accuracy
+      ? `<div style="font-size:11px;color:#7f8c8d;margin-top:4px;">精度约 ±${Math.round(accuracy)} 米</div>`
+      : '';
+
+    userMarker.setPopupContent(`
+      <div style="font-size:12px;line-height:1.8;min-width:190px;">
+        <b>📍 我的位置</b>
+        <div style="margin-top:4px;">
+          <span style="color:#e67e22;font-weight:600;">GCJ-02：</span><br>
+          ${gcjLng.toFixed(5)}, ${gcjLat.toFixed(5)}
+        </div>
+        <div>
+          <span style="color:#27ae60;font-weight:600;">WGS-84：</span><br>
+          ${wgsLng.toFixed(5)}, ${wgsLat.toFixed(5)}
+        </div>
+        ${accuracyText}
+      </div>
+    `);
+
+    if (showPopup) userMarker.openPopup();
+    return;
+  }
+
+  // 首次创建
+  const userIcon = L.divIcon({
+    className: 'user-marker',
+    html: '<div class="pulse-ring"></div><div class="dot"></div>',
+    iconSize: [30, 30],
+    iconAnchor: [15, 15]
+  });
+
+  userMarker = L.marker([displayCoord.lat, displayCoord.lng], {
+    icon: userIcon,
+    zIndexOffset: 1000
+  }).addTo(map);
+
+  const [gcjLng, gcjLat] = wgs84ToGcj02(wgsLng, wgsLat);
+  let accuracyText = accuracy
+    ? `<div style="font-size:11px;color:#7f8c8d;margin-top:4px;">精度约 ±${Math.round(accuracy)} 米</div>`
+    : '';
+
+  userMarker.bindPopup(`
+    <div style="font-size:12px;line-height:1.8;min-width:190px;">
+      <b>📍 我的位置</b>
+      <div style="margin-top:4px;">
+        <span style="color:#e67e22;font-weight:600;">GCJ-02：</span><br>
+        ${gcjLng.toFixed(5)}, ${gcjLat.toFixed(5)}
+      </div>
+      <div>
+        <span style="color:#27ae60;font-weight:600;">WGS-84：</span><br>
+        ${wgsLng.toFixed(5)}, ${wgsLat.toFixed(5)}
+      </div>
+      ${accuracyText}
+    </div>
+  `);
+
+  if (showPopup) userMarker.openPopup();
+}
+
+/* ================================================================
+   十、页面加载后自动开始追踪
+   ================================================================ */
+map.whenReady(function () {
+  setTimeout(startWatch, 800);
+});
+
+/* ================================================================
+   十一、系统深色模式监听（仅腾讯标准响应）
    ================================================================ */
 darkModeQuery.addEventListener('change', (e) => {
   isDarkMode = e.matches;
@@ -462,7 +903,7 @@ darkModeQuery.addEventListener('change', (e) => {
 });
 
 /* ================================================================
-   七、事件绑定
+   十二、事件绑定
    ================================================================ */
 document.querySelectorAll('.tile-btn[data-provider]').forEach(btn => {
   btn.addEventListener('click', function () {
@@ -509,13 +950,13 @@ document.querySelectorAll('.style-btn[data-tencent-style]').forEach(btn => {
 });
 
 /* ================================================================
-   八、响应式刷新
+   十三、响应式刷新
    ================================================================ */
 window.addEventListener('resize', () => map.invalidateSize());
 window.addEventListener('orientationchange', () => setTimeout(() => map.invalidateSize(), 300));
 
 /* ================================================================
-   九、点击地图显示双坐标系坐标
+   十四、点击地图显示双坐标系坐标
    ================================================================ */
 const popup = L.popup({ maxWidth: 280, className: 'coord-popup' });
 map.on('click', function (e) {
