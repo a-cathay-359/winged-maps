@@ -17,7 +17,7 @@
       -webkit-text-size-adjust: 100%;
     }
 
-    /* ===== 顶部控制栏 ===== */
+    /* ========== 顶部控制栏 ========== */
     #control-bar {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -41,12 +41,7 @@
     }
     #control-bar::-webkit-scrollbar { display: none; }
 
-    .bar-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
+    .bar-group { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
     .bar-divider {
       width: 1px; height: 24px;
       background: rgba(0, 0, 0, 0.12);
@@ -59,15 +54,10 @@
     }
 
     .brand-name {
-      font-size: 15px;
-      font-weight: 800;
-      color: #2c3e50;
-      letter-spacing: 0.5px;
-      flex-shrink: 0;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 15px; font-weight: 800;
+      color: #2c3e50; letter-spacing: 0.5px;
+      flex-shrink: 0; user-select: none;
+      display: flex; align-items: center; gap: 6px;
     }
     .brand-name svg { width: 20px; height: 20px; fill: #3498db; }
 
@@ -77,15 +67,13 @@
       border: 1.5px solid rgba(0, 0, 0, 0.12);
       border-radius: 20px;
       background: rgba(255, 255, 255, 0.75);
-      color: #444;
-      font-size: 13px; font-weight: 500;
+      color: #444; font-size: 13px; font-weight: 500;
       cursor: pointer;
       transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
       -webkit-tap-highlight-color: transparent;
       user-select: none; white-space: nowrap;
       min-height: 36px;
-      display: inline-flex;
-      align-items: center; justify-content: center;
+      display: inline-flex; align-items: center; justify-content: center;
       line-height: 1;
     }
     .tile-btn:hover {
@@ -112,35 +100,148 @@
     }
 
     #project-badge {
-      flex-shrink: 0;
-      margin-left: auto;
-      font-size: 12px;
-      line-height: 1.4;
+      flex-shrink: 0; margin-left: auto;
+      font-size: 12px; line-height: 1.4;
       color: #7f8c8d;
       padding: 4px 10px;
       border-radius: 12px;
       background: rgba(0, 0, 0, 0.03);
       border: 1px solid rgba(0, 0, 0, 0.06);
-      white-space: nowrap;
-      user-select: none;
-      display: inline-flex;
-      align-items: center;
+      white-space: nowrap; user-select: none;
+      display: inline-flex; align-items: center;
     }
     #project-badge a {
-      color: #3498db;
-      font-weight: 600;
-      text-decoration: none;
-      margin: 0 2px;
+      color: #3498db; font-weight: 600;
+      text-decoration: none; margin: 0 2px;
     }
     #project-badge a:hover { color: #2980b9; text-decoration: underline; }
 
+    /* ========== 侧边栏 ========== */
+    #sidebar {
+      position: fixed;
+      top: var(--control-bar-height, 68px);
+      left: 0; bottom: 0;
+      width: 260px;
+      z-index: 900;
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(14px) saturate(180%);
+      -webkit-backdrop-filter: blur(14px) saturate(180%);
+      border-right: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+      display: flex; flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #sidebar.open { transform: translateX(0); }
+
+    .sidebar-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      flex-shrink: 0;
+    }
+    .sidebar-title {
+      font-size: 14px; font-weight: 700;
+      color: #2c3e50; letter-spacing: 0.5px;
+    }
+    #sidebar-close-btn {
+      width: 30px; height: 30px;
+      border-radius: 8px; border: none;
+      background: transparent; color: #95a5a6;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    #sidebar-close-btn:hover {
+      background: rgba(0, 0, 0, 0.05); color: #333;
+    }
+
+    .sidebar-tools {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+
+    .tool-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 14px;
+      border: none; border-radius: 10px;
+      background: transparent; color: #444;
+      font-size: 14px; font-weight: 500;
+      cursor: pointer; text-align: left;
+      transition: background 0.15s ease, color 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+      font-family: inherit;
+    }
+    .tool-btn:hover {
+      background: rgba(52, 152, 219, 0.08);
+      color: #3498db;
+    }
+    .tool-btn.active {
+      background: #3498db; color: #fff;
+      box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+    }
+    .tool-btn.active svg { fill: #fff; }
+    .tool-btn svg {
+      width: 20px; height: 20px;
+      fill: #666; flex-shrink: 0;
+      transition: fill 0.15s ease;
+    }
+    .tool-btn:hover svg { fill: #3498db; }
+    .tool-btn-danger { color: #e74c3c; }
+    .tool-btn-danger svg { fill: #e74c3c; }
+    .tool-btn-danger:hover {
+      background: rgba(231, 76, 60, 0.08);
+      color: #e74c3c;
+    }
+    .tool-btn-danger:hover svg { fill: #e74c3c; }
+
+    .sidebar-tip {
+      padding: 12px 16px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      font-size: 12px; color: #7f8c8d;
+      line-height: 1.6; flex-shrink: 0;
+      min-height: 52px;
+    }
+
+    /* 遮罩（小屏打开侧边栏时显示） */
+    #sidebar-mask {
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 899;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    #sidebar-mask.open { opacity: 1; pointer-events: auto; }
+
+    /* 浮动打开按钮（小屏） */
+    #sidebar-open-btn {
+      position: fixed;
+      left: 10px;
+      top: calc(var(--control-bar-height, 68px) + 12px);
+      z-index: 800;
+      width: 42px; height: 42px;
+      border-radius: 10px; border: none;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #sidebar-open-btn:hover { background: #f5f5f5; }
+    #sidebar-open-btn svg { width: 22px; height: 22px; fill: #333; }
+
+    /* ========== 地图 ========== */
     #map {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       z-index: 1;
     }
 
-    .leaflet-top { top: 60px !important; }
     .leaflet-control-attribution {
       font-size: 10px !important;
       background: rgba(255,255,255,0.8) !important;
@@ -148,17 +249,12 @@
       border-radius: 4px 0 0 0 !important;
     }
 
-    /* ===== 定位按钮（准星图标） ===== */
+    /* ========== 定位按钮（准星） ========== */
     .locate-btn {
-      width: 40px;
-      height: 40px;
-      background: #fff;
-      border: none;
-      border-radius: 8px;
+      width: 40px; height: 40px;
+      background: #fff; border: none; border-radius: 8px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       box-shadow: 0 1px 5px rgba(0,0,0,0.3);
       transition: background 0.18s ease;
       -webkit-tap-highlight-color: transparent;
@@ -167,28 +263,23 @@
     .locate-btn:hover { background: #f5f5f5; }
     .locate-btn:active { background: #eee; }
     .locate-btn svg {
-      width: 22px;
-      height: 22px;
-      fill: #333;
+      width: 22px; height: 22px; fill: #333;
       transition: fill 0.2s ease;
     }
     .locate-btn.locating svg {
       fill: #3498db;
       animation: spin 1s linear infinite;
     }
-    .locate-btn.located svg {
-      fill: #3498db;
-    }
+    .locate-btn.located svg { fill: #3498db; }
     @keyframes spin {
       from { transform: rotate(0deg); }
       to   { transform: rotate(360deg); }
     }
 
-    /* 定位标记（脉冲蓝点） */
+    /* 定位标记 */
     .user-marker { position: relative; }
     .user-marker .pulse-ring {
-      position: absolute;
-      top: 50%; left: 50%;
+      position: absolute; top: 50%; left: 50%;
       width: 30px; height: 30px;
       margin: -15px 0 0 -15px;
       border-radius: 50%;
@@ -196,8 +287,7 @@
       animation: pulse 1.8s ease-out infinite;
     }
     .user-marker .dot {
-      position: absolute;
-      top: 50%; left: 50%;
+      position: absolute; top: 50%; left: 50%;
       width: 14px; height: 14px;
       margin: -7px 0 0 -7px;
       border-radius: 50%;
@@ -210,12 +300,12 @@
       100% { transform: scale(2.4); opacity: 0; }
     }
 
-    /* ===== 速度面板（底部中央） ===== */
+    /* ========== 速度面板 ========== */
     #speed-panel {
       position: fixed;
       bottom: calc(22px + env(safe-area-inset-bottom, 0px));
       left: 50%;
-      transform: translateX(-50%) translateY(0);
+      transform: translateX(-50%);
       z-index: 999;
       background: rgba(255, 255, 255, 0.94);
       backdrop-filter: blur(14px) saturate(180%);
@@ -223,39 +313,24 @@
       padding: 7px 16px;
       border-radius: 22px;
       box-shadow: 0 2px 14px rgba(0, 0, 0, 0.15);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display: flex; align-items: center; gap: 8px;
       border: 1px solid rgba(0, 0, 0, 0.06);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s ease, transform 0.35s ease;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.35s ease;
     }
-    #speed-panel.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
+    #speed-panel.visible { opacity: 1; pointer-events: auto; }
     #speed-panel .speed-value {
-      font-size: 22px;
-      font-weight: 800;
-      color: #2c3e50;
-      line-height: 1;
-      font-variant-numeric: tabular-nums;
-      min-width: 50px;
-      text-align: right;
+      font-size: 22px; font-weight: 800; color: #2c3e50;
+      line-height: 1; font-variant-numeric: tabular-nums;
+      min-width: 50px; text-align: right;
       letter-spacing: -0.5px;
     }
     #speed-panel .speed-unit {
-      font-size: 11px;
-      color: #95a5a6;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      margin-right: 2px;
+      font-size: 11px; color: #95a5a6; font-weight: 700;
+      letter-spacing: 0.3px; margin-right: 2px;
     }
     #speed-panel .speed-status {
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 12px; font-weight: 600;
       color: #3498db;
       padding: 3px 10px;
       background: rgba(52, 152, 219, 0.12);
@@ -263,7 +338,6 @@
       white-space: nowrap;
       transition: color 0.25s ease, background 0.25s ease;
     }
-    /* 状态颜色 */
     #speed-panel.status-still .speed-value { color: #7f8c8d; }
     #speed-panel.status-still .speed-status {
       color: #7f8c8d;
@@ -282,61 +356,84 @@
       background: rgba(231, 76, 60, 0.12);
     }
 
-    @media (prefers-color-scheme: dark) {
-      .locate-btn { background: #2c2c3a; }
-      .locate-btn:hover { background: #3a3a4a; }
-      .locate-btn:active { background: #444; }
-      .locate-btn svg { fill: #ddd; }
-      .locate-btn.locating svg,
-      .locate-btn.located svg { fill: #5dade2; }
-
-      #speed-panel {
-        background: rgba(40, 40, 52, 0.94);
-        border-color: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
-      }
-      #speed-panel .speed-value { color: #e0e0e0; }
-      #speed-panel .speed-unit { color: #7f8c8d; }
-      #speed-panel.status-still .speed-value { color: #95a5a6; }
+    /* ========== 测量标签 ========== */
+    .measure-icon {
+      background: transparent !important;
+      border: none !important;
+      pointer-events: none;
+    }
+    .measure-label {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      padding: 3px 9px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.4;
+      font-variant-numeric: tabular-nums;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(52, 152, 219, 0.35);
+      color: #2c3e50;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+    }
+    .measure-label.distance {
+      border-color: rgba(52, 152, 219, 0.4);
+    }
+    .measure-label.total-distance {
+      background: #3498db; color: #fff;
+      border-color: #3498db;
+    }
+    .measure-label.total-area {
+      background: #e67e22; color: #fff;
+      border-color: #e67e22;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .measure-label.circle-radius {
+      background: #9b59b6; color: #fff;
+      border-color: #9b59b6;
     }
 
+    /* ========== 坐标弹窗 ========== */
     .coord-popup {
-      font-size: 12px;
-      line-height: 1.8;
-      min-width: 200px;
+      font-size: 12px; line-height: 1.8; min-width: 200px;
     }
     .coord-popup .coord-title {
-      font-weight: 700;
-      margin-bottom: 4px;
-      color: #2c3e50;
+      font-weight: 700; margin-bottom: 4px; color: #2c3e50;
     }
     .coord-popup .coord-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
+      display: flex; justify-content: space-between; gap: 10px;
     }
-    .coord-popup .coord-label {
-      font-weight: 600;
-      flex-shrink: 0;
-    }
+    .coord-popup .coord-label { font-weight: 600; flex-shrink: 0; }
     .coord-popup .gcj { color: #e67e22; }
     .coord-popup .wgs { color: #27ae60; }
     .coord-popup .coord-note {
-      margin-top: 6px;
-      padding-top: 6px;
+      margin-top: 6px; padding-top: 6px;
       border-top: 1px dashed rgba(0,0,0,0.15);
-      font-size: 11px;
-      color: #7f8c8d;
+      font-size: 11px; color: #7f8c8d;
     }
 
-    @media (max-width: 768px) {
+    /* ========== 大屏（≥768px，约 8 寸平板）：侧边栏常驻 ========== */
+    @media (min-width: 768px) {
+      #sidebar {
+        transform: translateX(0);
+        width: 240px;
+      }
+      #sidebar-mask { display: none; }
+      #sidebar-open-btn { display: none; }
+      #sidebar-close-btn { display: none; }
+      #map { left: 240px; }
+    }
+
+    /* ========== 小屏适配 ========== */
+    @media (max-width: 767px) {
       #control-bar { padding: 8px 10px; gap: 6px; }
       .tile-btn { padding: 6px 12px; font-size: 12px; min-height: 34px; }
       .style-btn { padding: 4px 9px; font-size: 11px; min-height: 28px; }
       .bar-label { font-size: 11px; }
       .brand-name { font-size: 13px; }
       .brand-name svg { width: 17px; height: 17px; }
-      .leaflet-top { top: 54px !important; }
       #project-badge { font-size: 11px; padding: 4px 8px; }
       #speed-panel .speed-value { font-size: 20px; min-width: 44px; }
     }
@@ -354,10 +451,12 @@
       .style-btn { padding: 6px 14px; font-size: 13px; min-height: 34px; }
       .brand-name { font-size: 17px; }
       .brand-name svg { width: 22px; height: 22px; }
-      .leaflet-top { top: 68px !important; }
       #project-badge { font-size: 13px; padding: 6px 14px; }
+      #sidebar { width: 260px; }
+      #map { left: 260px; }
     }
 
+    /* ========== 深色模式 ========== */
     @media (prefers-color-scheme: dark) {
       #control-bar {
         background: rgba(28, 28, 38, 0.92);
@@ -387,11 +486,63 @@
         color: #95a5a6;
       }
       #project-badge a { color: #5dade2; }
+
+      #sidebar {
+        background: rgba(28, 28, 38, 0.97);
+        border-right-color: rgba(255, 255, 255, 0.08);
+      }
+      .sidebar-header { border-bottom-color: rgba(255, 255, 255, 0.06); }
+      .sidebar-title { color: #e0e0e0; }
+      #sidebar-close-btn { color: #7f8c8d; }
+      #sidebar-close-btn:hover { background: rgba(255, 255, 255, 0.06); color: #eee; }
+      .tool-btn { color: #ccc; }
+      .tool-btn svg { fill: #999; }
+      .tool-btn:hover {
+        background: rgba(52, 152, 219, 0.15);
+        color: #5dade2;
+      }
+      .tool-btn:hover svg { fill: #5dade2; }
+      .tool-btn.active { background: #2980b9; color: #fff; }
+      .tool-btn-danger { color: #e74c3c; }
+      .tool-btn-danger svg { fill: #e74c3c; }
+      .sidebar-tip {
+        border-top-color: rgba(255, 255, 255, 0.06);
+        color: #7f8c8d;
+      }
+      #sidebar-open-btn {
+        background: rgba(40, 40, 52, 0.95);
+      }
+      #sidebar-open-btn svg { fill: #ddd; }
+      #sidebar-open-btn:hover { background: rgba(60, 60, 72, 0.95); }
+
+      .locate-btn { background: #2c2c3a; }
+      .locate-btn:hover { background: #3a3a4a; }
+      .locate-btn svg { fill: #ddd; }
+      .locate-btn.locating svg,
+      .locate-btn.located svg { fill: #5dade2; }
+
+      #speed-panel {
+        background: rgba(40, 40, 52, 0.94);
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+      #speed-panel .speed-value { color: #e0e0e0; }
+      #speed-panel .speed-unit { color: #7f8c8d; }
+      #speed-panel.status-still .speed-value { color: #95a5a6; }
+
+      .measure-label {
+        background: rgba(40, 40, 52, 0.96);
+        border-color: rgba(93, 173, 226, 0.4);
+        color: #e0e0e0;
+      }
+      .measure-label.total-distance { background: #2980b9; color: #fff; }
+      .measure-label.total-area { background: #d35400; color: #fff; }
+      .measure-label.circle-radius { background: #8e44ad; color: #fff; }
     }
   </style>
 </head>
 <body>
 
+<!-- ========== 顶部控制栏 ========== -->
 <div id="control-bar">
   <div class="brand-name">
     <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
@@ -425,9 +576,57 @@
   </div>
 </div>
 
+<!-- ========== 侧边栏遮罩 ========== -->
+<div id="sidebar-mask"></div>
+
+<!-- ========== 侧边栏 ========== -->
+<div id="sidebar">
+  <div class="sidebar-header">
+    <span class="sidebar-title">测绘工具</span>
+    <button id="sidebar-close-btn" title="关闭">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg>
+    </button>
+  </div>
+
+  <div class="sidebar-tools">
+    <button class="tool-btn" data-tool="distance">
+      <svg viewBox="0 0 24 24"><path d="M3 17h2v-2H3v2zm0-4h2v-2H3v2zm0-4h2V7H3v2zm4 8h2v-2H7v2zm0-4h2v-2H7v2zm0-4h2V7H7v2zm4 8h2v-2h-2v2zm0-4h2v-2h-2v2zm0-4h2V7h-2v2zm4 8h2v-2h-2v2zm0-4h2v-2h-2v2zm0-4h2V7h-2v2zm4 8h2v-2h-2v2zm0-4h2v-2h-2v2zm0-4h2V7h-2v2z"/></svg>
+      <span>测距</span>
+    </button>
+
+    <button class="tool-btn" data-tool="area">
+      <svg viewBox="0 0 24 24"><path d="M3 3v18h18V3H3zm16 16H5V5h14v14zM7 7h2v2H7V7zm0 4h2v2H7v-2zm0 4h2v2H7v-2zm4-8h2v2h-2V7zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zm4-8h2v2h-2V7zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2z"/></svg>
+      <span>测面积</span>
+    </button>
+
+    <button class="tool-btn" data-tool="circle">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-13c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      <span>画圆</span>
+    </button>
+
+    <button class="tool-btn" data-tool="coord">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <span>坐标拾取</span>
+    </button>
+
+    <button class="tool-btn tool-btn-danger" data-tool="clear">
+      <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+      <span>清除全部</span>
+    </button>
+  </div>
+
+  <div class="sidebar-tip" id="sidebar-tip">💡 选择下方工具开始测绘</div>
+</div>
+
+<!-- ========== 小屏浮动打开按钮 ========== -->
+<button id="sidebar-open-btn" title="测绘工具">
+  <svg viewBox="0 0 24 24"><path d="M3 17h2v-2H3v2zm0-4h2v-2H3v2zm0-4h2V7H3v2zm4 8h2v-2H7v2zm0-4h2v-2H7v2zm0-4h2V7H7v2zm4 8h2v-2h-2v2zm0-4h2v-2h-2v2zm0-4h2V7h-2v2zm4 8h2v-2h-2v2zm0-4h2v-2h-2v2zm0-4h2V7h-2v2zm4 8h2v-2h-2v2zm0-4h2v-2h-2v2zm0-4h2V7h-2v2z"/></svg>
+</button>
+
+<!-- ========== 地图 ========== -->
 <div id="map"></div>
 
-<!-- 速度面板 -->
+<!-- ========== 速度面板 ========== -->
 <div id="speed-panel">
   <span class="speed-value">0.0</span>
   <span class="speed-unit">km/h</span>
@@ -491,9 +690,6 @@ function gcj02ToWgs84(lng, lat) {
   return [lng * 2 - (lng + dlng), lat * 2 - (lat + dlat)];
 }
 
-/* ================================================================
-   二、Haversine 距离计算（返回米）
-   ================================================================ */
 function haversine(lat1, lng1, lat2, lng2) {
   const R = 6371000;
   const toRad = x => x * Math.PI / 180;
@@ -505,14 +701,40 @@ function haversine(lat1, lng1, lat2, lng2) {
   return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+function geodesicArea(latLngs) {
+  const pointsCount = latLngs.length;
+  let area = 0.0;
+  const d2r = Math.PI / 180;
+  if (pointsCount > 2) {
+    for (let i = 0; i < pointsCount; i++) {
+      const p1 = latLngs[i];
+      const p2 = latLngs[(i + 1) % pointsCount];
+      area += ((p2.lng - p1.lng) * d2r) *
+              (2 + Math.sin(p1.lat * d2r) + Math.sin(p2.lat * d2r));
+    }
+    area = area * 6378137.0 * 6378137.0 / 2.0;
+  }
+  return Math.abs(area);
+}
+
+function formatDistance(m) {
+  if (m < 1000) return Math.round(m) + ' m';
+  return (m / 1000).toFixed(2) + ' km';
+}
+function formatArea(sqm) {
+  if (sqm < 10000) return Math.round(sqm) + ' m²';
+  if (sqm < 1000000) return (sqm / 10000).toFixed(2) + ' ha';
+  return (sqm / 1000000).toFixed(2) + ' km²';
+}
+
 /* ================================================================
-   三、系统深色模式检测
+   二、系统深色模式检测
    ================================================================ */
 const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 let isDarkMode = darkModeQuery.matches;
 
 /* ================================================================
-   四、瓦片源配置
+   三、瓦片源配置
    ================================================================ */
 const AMAP_SUBDOMAINS = ['1','2','3','4'];
 
@@ -576,7 +798,7 @@ const esriLayers = {
 };
 
 /* ================================================================
-   五、状态管理
+   四、状态管理
    ================================================================ */
 let currentProvider = 'amap';
 let currentAmapStyle = 'normal';
@@ -586,11 +808,20 @@ let userMarker = null;
 let userWgsLng = null;
 let userWgsLat = null;
 
-let watchId = null;             // watchPosition 句柄
-let isFirstFix = true;          // 是否是首次定位
-let lastPos = null;             // { lat, lng, time } 上一次有效位置
-let currentSpeedMs = 0;         // 平滑后的速度（米/秒）
-let lastMarkerUpdate = 0;       // 上次标记更新时间（节流用）
+let watchId = null;
+let isFirstFix = true;
+let lastPos = null;
+let currentSpeedMs = 0;
+let lastMarkerUpdate = 0;
+
+/* 测绘工具状态 */
+let currentTool = null;      // null | 'distance' | 'area' | 'circle' | 'coord'
+let drawLayers = [];         // 已完成的绘制图层
+let drawPoints = [];         // 当前工具累积的点
+let activePolyline = null;   // 当前活动折线/多边形
+let activeMarkers = [];      // 当前顶点标记
+let activeLabels = [];       // 当前标签
+let circleCenter = null;     // 画圆：已设置的圆心
 
 function getTargetLayer() {
   if (currentProvider === 'amap')      return amapLayers[currentAmapStyle] || amapLayers.normal;
@@ -623,7 +854,7 @@ function getCurrentCRS() {
 }
 
 /* ================================================================
-   六、初始化地图（带边界限制）
+   五、初始化地图
    ================================================================ */
 const map = L.map('map', {
   center: [35.86, 104.19],
@@ -640,344 +871,302 @@ L.control.zoom({ position: 'bottomright' }).addTo(map);
 L.control.scale({ position: 'bottomleft', imperial: false }).addTo(map);
 
 /* ================================================================
-   七、定位功能（watchPosition 持续追踪 + 速度计算）
+   六、布局：动态计算控制栏高度
+   ================================================================ */
+function updateLayout() {
+  const cb = document.getElementById('control-bar');
+  const h = cb.offsetHeight;
+  document.documentElement.style.setProperty('--control-bar-height', h + 'px');
+}
+updateLayout();
+
+/* ================================================================
+   七、侧边栏控制
+   ================================================================ */
+const sidebar = document.getElementById('sidebar');
+const sidebarMask = document.getElementById('sidebar-mask');
+const sidebarOpenBtn = document.getElementById('sidebar-open-btn');
+const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+const sidebarTip = document.getElementById('sidebar-tip');
+
+function openSidebar() {
+  sidebar.classList.add('open');
+  sidebarMask.classList.add('open');
+}
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  sidebarMask.classList.remove('open');
+}
+
+sidebarOpenBtn.addEventListener('click', openSidebar);
+sidebarCloseBtn.addEventListener('click', closeSidebar);
+sidebarMask.addEventListener('click', closeSidebar);
+
+/* ================================================================
+   八、测绘工具
    ================================================================ */
 
-/* 创建定位按钮 */
-const LocateControl = L.Control.extend({
-  options: { position: 'bottomright' },
-  onAdd: function () {
-    const btn = L.DomUtil.create('button', 'locate-btn');
-    btn.title = '定位到我的位置';
+/* 工具提示文案 */
+const TOOL_TIPS = {
+  null:     '💡 选择下方工具开始测绘',
+  distance: '📏 点击地图依次添加点，实时显示每段和总距离',
+  area:     '⬛ 点击地图依次添加点，实时计算面积和周长',
+  circle:   '⭕ 第一次点击设圆心，第二次点击确定半径',
+  coord:    '📍 点击地图任意位置，查看双坐标系坐标'
+};
+function updateTip() {
+  sidebarTip.innerHTML = TOOL_TIPS[currentTool] || TOOL_TIPS[null];
+}
 
-    btn.innerHTML = `
-      <svg viewBox="0 0 24 24">
-        <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
-      </svg>`;
-
-    L.DomEvent.disableClickPropagation(btn);
-    L.DomEvent.on(btn, 'click', function (e) {
-      L.DomEvent.stopPropagation(e);
-      // 已有位置：直接飞过去并放大
-      if (userWgsLng !== null && userWgsLat !== null) {
-        const coord = getDisplayCoord(userWgsLng, userWgsLat);
-        map.flyTo([coord.lat, coord.lng], 15, { duration: 1.2 });
-        if (userMarker) setTimeout(() => userMarker.openPopup(), 700);
-      } else {
-        // 还没有位置：启动追踪
-        startWatch();
-      }
-    });
-
-    this._btn = btn;
-    return btn;
+/* 切换工具 */
+function setTool(tool) {
+  // 把当前活动的图形"冻结"到 drawLayers
+  if (activePolyline) {
+    drawLayers.push(activePolyline);
+    activePolyline = null;
   }
+  activeMarkers.forEach(m => drawLayers.push(m));
+  activeMarkers = [];
+  activeLabels.forEach(l => drawLayers.push(l));
+  activeLabels = [];
+
+  // 清空当前工具状态
+  drawPoints = [];
+  circleCenter = null;
+
+  currentTool = tool;
+  updateTip();
+}
+
+/* 工具按钮点击 */
+document.querySelectorAll('.tool-btn').forEach(btn => {
+  btn.addEventListener('click', function () {
+    const tool = this.dataset.tool;
+
+    if (tool === 'clear') {
+      clearAllDrawings();
+      return;
+    }
+
+    if (currentTool === tool) {
+      // 再次点击同一工具：取消激活
+      setTool(null);
+      document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+    } else {
+      setTool(tool);
+      document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    }
+
+    // 小屏：选完工具自动关闭侧边栏，方便直接操作地图
+    if (window.innerWidth < 768) {
+      setTimeout(closeSidebar, 150);
+    }
+  });
 });
 
-map.addControl(new LocateControl());
-const locateButton = document.querySelector('.locate-btn');
-
-/* 启动持续位置追踪 */
-function startWatch() {
-  if (watchId !== null) return;
-  if (!navigator.geolocation) return;
-
-  if (locateButton) locateButton.classList.add('locating');
-
-  watchId = navigator.geolocation.watchPosition(
-    onPositionUpdate,
-    onPositionError,
-    {
-      enableHighAccuracy: true,
-      timeout: 15000,
-      maximumAge: 0
-    }
-  );
+/* 清除全部绘制 */
+function clearAllDrawings() {
+  drawLayers.forEach(l => map.removeLayer(l));
+  drawLayers = [];
+  activeMarkers.forEach(m => map.removeLayer(m));
+  activeMarkers = [];
+  activeLabels.forEach(l => map.removeLayer(l));
+  activeLabels = [];
+  if (activePolyline) {
+    map.removeLayer(activePolyline);
+    activePolyline = null;
+  }
+  drawPoints = [];
+  circleCenter = null;
+  currentTool = null;
+  document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+  updateTip();
 }
 
-/* 位置更新回调 —— 每次位置变化都会触发 */
-function onPositionUpdate(position) {
-  const now = Date.now();
-  const wgsLng = position.coords.longitude;
-  const wgsLat = position.coords.latitude;
-  const accuracy = position.coords.accuracy;
-
-  userWgsLng = wgsLng;
-  userWgsLat = wgsLat;
-
-  // ---- 计算速度 ----
-  if (lastPos) {
-    const dt = (now - lastPos.time) / 1000;
-    if (dt >= 0.8) {  // 至少间隔 0.8 秒
-      const dist = haversine(lastPos.lat, lastPos.lng, wgsLat, wgsLng);
-
-      // 距离小于 1 米视为 GPS 漂移，不计入
-      let instantSpeed = 0;
-      if (dist >= 1) {
-        instantSpeed = dist / dt;   // 米/秒
-      }
-
-      // 指数移动平均，避免速度抖动
-      currentSpeedMs = currentSpeedMs * 0.5 + instantSpeed * 0.5;
-
-      // 速度极小值归零
-      if (currentSpeedMs < 0.3) currentSpeedMs = 0;
-
-      lastPos = { lat: wgsLat, lng: wgsLng, time: now };
-    }
-  } else {
-    lastPos = { lat: wgsLat, lng: wgsLng, time: now };
-    currentSpeedMs = 0;
-  }
-
-  // ---- 首次定位：flyTo 到用户位置（保持缩放） ----
-  if (isFirstFix) {
-    isFirstFix = false;
-    const displayCoord = getDisplayCoord(wgsLng, wgsLat);
-    map.flyTo([displayCoord.lat, displayCoord.lng], map.getZoom(), { duration: 1.5 });
-
-    if (locateButton) {
-      locateButton.classList.remove('locating');
-      locateButton.classList.add('located');
-    }
-  }
-
-  // ---- 更新地图标记（节流：最多每秒一次） ----
-  if (now - lastMarkerUpdate >= 800) {
-    lastMarkerUpdate = now;
-    placeUserMarker(wgsLng, wgsLat, false, accuracy);
-  }
-
-  // ---- 更新速度面板 ----
-  updateSpeedUI();
-}
-
-/* 定位错误回调 */
-function onPositionError(error) {
-  if (locateButton) locateButton.classList.remove('locating');
-  if (!isFirstFix) return;  // 首次成功后就不再弹窗
-
-  let msg = '定位失败：';
-  switch (error.code) {
-    case error.PERMISSION_DENIED:     msg += '你拒绝了定位权限'; break;
-    case error.POSITION_UNAVAILABLE:  msg += '位置信息不可用'; break;
-    case error.TIMEOUT:               msg += '定位超时'; break;
-    default:                          msg += '未知错误'; break;
-  }
-  // 只在用户主动点击时弹窗
-  if (isFirstFix) console.warn(msg);
-}
-
-/* ================================================================
-   八、速度面板 UI 更新
-   ================================================================ */
-const speedPanel = document.getElementById('speed-panel');
-const speedValueEl = speedPanel.querySelector('.speed-value');
-const speedStatusEl = speedPanel.querySelector('.speed-status');
-
-function updateSpeedUI() {
-  const kmh = currentSpeedMs * 3.6;
-
-  // 显示速度
-  speedValueEl.textContent = kmh < 1 ? '0.0' : kmh.toFixed(1);
-
-  // 判断状态
-  speedPanel.classList.remove('status-still', 'status-walk', 'status-run', 'status-drive');
-  let status = '静止';
-  if (kmh < 1) {
-    status = '静止';
-    speedPanel.classList.add('status-still');
-  } else if (kmh < 6) {
-    status = '步行';
-    speedPanel.classList.add('status-walk');
-  } else if (kmh < 25) {
-    status = '跑步/骑行';
-    speedPanel.classList.add('status-run');
-  } else {
-    status = '乘车';
-    speedPanel.classList.add('status-drive');
-  }
-  speedStatusEl.textContent = status;
-
-  // 首次有位置后显示面板
-  if (userWgsLng !== null) {
-    speedPanel.classList.add('visible');
-  }
-}
-
-/* ================================================================
-   九、坐标换算与标记
-   ================================================================ */
-function getDisplayCoord(wgsLng, wgsLat) {
-  if (currentProvider === 'esri') {
-    return { lng: wgsLng, lat: wgsLat, crs: 'WGS-84' };
-  } else {
-    const [gcjLng, gcjLat] = wgs84ToGcj02(wgsLng, wgsLat);
-    return { lng: gcjLng, lat: gcjLat, crs: 'GCJ-02' };
-  }
-}
-
-function placeUserMarker(wgsLng, wgsLat, showPopup, accuracy) {
-  const displayCoord = getDisplayCoord(wgsLng, wgsLat);
-
-  // 已存在标记：只更新位置，不重建（更流畅）
-  if (userMarker) {
-    userMarker.setLatLng([displayCoord.lat, displayCoord.lng]);
-
-    // 更新弹窗内容
-    const [gcjLng, gcjLat] = wgs84ToGcj02(wgsLng, wgsLat);
-    let accuracyText = accuracy
-      ? `<div style="font-size:11px;color:#7f8c8d;margin-top:4px;">精度约 ±${Math.round(accuracy)} 米</div>`
-      : '';
-
-    userMarker.setPopupContent(`
-      <div style="font-size:12px;line-height:1.8;min-width:190px;">
-        <b>📍 我的位置</b>
-        <div style="margin-top:4px;">
-          <span style="color:#e67e22;font-weight:600;">GCJ-02：</span><br>
-          ${gcjLng.toFixed(5)}, ${gcjLat.toFixed(5)}
-        </div>
-        <div>
-          <span style="color:#27ae60;font-weight:600;">WGS-84：</span><br>
-          ${wgsLng.toFixed(5)}, ${wgsLat.toFixed(5)}
-        </div>
-        ${accuracyText}
-      </div>
-    `);
-
-    if (showPopup) userMarker.openPopup();
-    return;
-  }
-
-  // 首次创建
-  const userIcon = L.divIcon({
-    className: 'user-marker',
-    html: '<div class="pulse-ring"></div><div class="dot"></div>',
-    iconSize: [30, 30],
-    iconAnchor: [15, 15]
+/* 创建测量标签 */
+function makeLabel(latlng, html, extraClass) {
+  const icon = L.divIcon({
+    className: 'measure-icon',
+    html: `<div class="measure-label ${extraClass || ''}">${html}</div>`,
+    iconSize: [0, 0],
+    iconAnchor: [0, 0]
   });
+  return L.marker(latlng, { icon, interactive: false }).addTo(map);
+}
 
-  userMarker = L.marker([displayCoord.lat, displayCoord.lng], {
-    icon: userIcon,
-    zIndexOffset: 1000
+/* ---------- 测距 ---------- */
+function handleDistanceClick(latlng) {
+  drawPoints.push(latlng);
+
+  // 顶点标记
+  const marker = L.circleMarker(latlng, {
+    radius: 5, color: '#3498db',
+    fillColor: '#fff', fillOpacity: 1, weight: 2.5
   }).addTo(map);
+  activeMarkers.push(marker);
 
-  const [gcjLng, gcjLat] = wgs84ToGcj02(wgsLng, wgsLat);
-  let accuracyText = accuracy
-    ? `<div style="font-size:11px;color:#7f8c8d;margin-top:4px;">精度约 ±${Math.round(accuracy)} 米</div>`
-    : '';
+  // 更新折线
+  if (drawPoints.length >= 2) {
+    if (activePolyline) {
+      activePolyline.setLatLngs(drawPoints);
+    } else {
+      activePolyline = L.polyline(drawPoints, {
+        color: '#3498db', weight: 3, opacity: 0.9
+      }).addTo(map);
+    }
+  }
 
-  userMarker.bindPopup(`
-    <div style="font-size:12px;line-height:1.8;min-width:190px;">
-      <b>📍 我的位置</b>
-      <div style="margin-top:4px;">
-        <span style="color:#e67e22;font-weight:600;">GCJ-02：</span><br>
-        ${gcjLng.toFixed(5)}, ${gcjLat.toFixed(5)}
-      </div>
-      <div>
-        <span style="color:#27ae60;font-weight:600;">WGS-84：</span><br>
-        ${wgsLng.toFixed(5)}, ${wgsLat.toFixed(5)}
-      </div>
-      ${accuracyText}
-    </div>
-  `);
+  updateDistanceLabels();
+}
 
-  if (showPopup) userMarker.openPopup();
+function updateDistanceLabels() {
+  activeLabels.forEach(l => map.removeLayer(l));
+  activeLabels = [];
+
+  if (drawPoints.length < 2) return;
+
+  let total = 0;
+  for (let i = 0; i < drawPoints.length - 1; i++) {
+    const segDist = map.distance(drawPoints[i], drawPoints[i + 1]);
+    total += segDist;
+
+    const midLat = (drawPoints[i].lat + drawPoints[i + 1].lat) / 2;
+    const midLng = (drawPoints[i].lng + drawPoints[i + 1].lng) / 2;
+
+    const lbl = makeLabel([midLat, midLng], formatDistance(segDist), 'distance');
+    activeLabels.push(lbl);
+  }
+
+  // 总距离标签放在最后一个点上方
+  const endPoint = drawPoints[drawPoints.length - 1];
+  const totalLbl = makeLabel(endPoint, '总距离 ' + formatDistance(total), 'total-distance');
+  activeLabels.push(totalLbl);
+}
+
+/* ---------- 测面积 ---------- */
+function handleAreaClick(latlng) {
+  drawPoints.push(latlng);
+
+  const marker = L.circleMarker(latlng, {
+    radius: 5, color: '#e67e22',
+    fillColor: '#fff', fillOpacity: 1, weight: 2.5
+  }).addTo(map);
+  activeMarkers.push(marker);
+
+  if (drawPoints.length === 2) {
+    if (activePolyline) {
+      activePolyline.setLatLngs(drawPoints);
+    } else {
+      activePolyline = L.polyline(drawPoints, {
+        color: '#e67e22', weight: 2.5, dashArray: '5, 5'
+      }).addTo(map);
+    }
+  } else if (drawPoints.length >= 3) {
+    // 3 个点以上换成多边形
+    if (activePolyline && activePolyline instanceof L.Polygon) {
+      activePolyline.setLatLngs(drawPoints);
+    } else {
+      if (activePolyline) map.removeLayer(activePolyline);
+      activePolyline = L.polygon(drawPoints, {
+        color: '#e67e22', weight: 2.5,
+        fillColor: '#e67e22', fillOpacity: 0.15
+      }).addTo(map);
+    }
+  }
+
+  updateAreaLabels();
+}
+
+function updateAreaLabels() {
+  activeLabels.forEach(l => map.removeLayer(l));
+  activeLabels = [];
+
+  if (drawPoints.length < 3) return;
+
+  const area = geodesicArea(drawPoints);
+  let perimeter = 0;
+  for (let i = 0; i < drawPoints.length; i++) {
+    perimeter += map.distance(drawPoints[i], drawPoints[(i + 1) % drawPoints.length]);
+  }
+
+  // 中心位置
+  let lat = 0, lng = 0;
+  drawPoints.forEach(p => { lat += p.lat; lng += p.lng; });
+  const center = [lat / drawPoints.length, lng / drawPoints.length];
+
+  const lbl = makeLabel(
+    center,
+    `面积 ${formatArea(area)}<br>周长 ${formatDistance(perimeter)}`,
+    'total-area'
+  );
+  activeLabels.push(lbl);
+}
+
+/* ---------- 画圆 ---------- */
+function handleCircleClick(latlng) {
+  if (!circleCenter) {
+    // 第一次点击：设圆心
+    circleCenter = latlng;
+
+    const marker = L.circleMarker(latlng, {
+      radius: 5, color: '#9b59b6',
+      fillColor: '#fff', fillOpacity: 1, weight: 2.5
+    }).addTo(map);
+    activeMarkers.push(marker);
+
+    sidebarTip.innerHTML = '⭕ 已设圆心，再点一次确定半径';
+  } else {
+    // 第二次点击：确定半径
+    const radius = map.distance(circleCenter, latlng);
+
+    const circle = L.circle(circleCenter, {
+      radius: radius,
+      color: '#9b59b6', weight: 2.5,
+      fillColor: '#9b59b6', fillOpacity: 0.15
+    }).addTo(map);
+    drawLayers.push(circle);
+
+    const radiusLine = L.polyline([circleCenter, latlng], {
+      color: '#9b59b6', weight: 1.5,
+      dashArray: '4, 4', opacity: 0.7
+    }).addTo(map);
+    drawLayers.push(radiusLine);
+
+    const midLat = (circleCenter.lat + latlng.lat) / 2;
+    const midLng = (circleCenter.lng + latlng.lng) / 2;
+    const lbl = makeLabel([midLat, midLng], 'r = ' + formatDistance(radius), 'circle-radius');
+    drawLayers.push(lbl);
+
+    // 圆心标记也冻结
+    activeMarkers.forEach(m => drawLayers.push(m));
+    activeMarkers = [];
+
+    // 重置，允许继续画下一个圆
+    circleCenter = null;
+    updateTip();
+  }
 }
 
 /* ================================================================
-   十、页面加载后自动开始追踪
+   九、地图点击统一分发
    ================================================================ */
-map.whenReady(function () {
-  setTimeout(startWatch, 800);
-});
-
-/* ================================================================
-   十一、系统深色模式监听（仅腾讯标准响应）
-   ================================================================ */
-darkModeQuery.addEventListener('change', (e) => {
-  isDarkMode = e.matches;
-  if (currentProvider === 'tencent' && currentTencentStyle === 'normal') {
-    switchLayer();
-  }
-});
-
-/* ================================================================
-   十二、事件绑定
-   ================================================================ */
-document.querySelectorAll('.tile-btn[data-provider]').forEach(btn => {
-  btn.addEventListener('click', function () {
-    const provider = this.dataset.provider;
-    if (provider === currentProvider) return;
-
-    currentProvider = provider;
-    document.querySelectorAll('.tile-btn[data-provider]').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-
-    updateStyleBarVisibility();
-    switchLayer();
-
-    if (navigator.vibrate) navigator.vibrate(8);
-  });
-});
-
-document.querySelectorAll('.style-btn[data-amap-style]').forEach(btn => {
-  btn.addEventListener('click', function () {
-    const style = this.dataset.amapStyle;
-    if (style === currentAmapStyle) return;
-    currentAmapStyle = style;
-
-    document.querySelectorAll('.style-btn[data-amap-style]').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-
-    if (currentProvider === 'amap') switchLayer();
-    if (navigator.vibrate) navigator.vibrate(8);
-  });
-});
-
-document.querySelectorAll('.style-btn[data-tencent-style]').forEach(btn => {
-  btn.addEventListener('click', function () {
-    const style = this.dataset.tencentStyle;
-    if (style === currentTencentStyle) return;
-    currentTencentStyle = style;
-
-    document.querySelectorAll('.style-btn[data-tencent-style]').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-
-    if (currentProvider === 'tencent') switchLayer();
-    if (navigator.vibrate) navigator.vibrate(8);
-  });
-});
-
-/* ================================================================
-   十三、响应式刷新
-   ================================================================ */
-window.addEventListener('resize', () => map.invalidateSize());
-window.addEventListener('orientationchange', () => setTimeout(() => map.invalidateSize(), 300));
-
-/* ================================================================
-   十四、点击地图显示双坐标系坐标
-   ================================================================ */
-const popup = L.popup({ maxWidth: 280, className: 'coord-popup' });
-map.on('click', function (e) {
-  const clickedLng = e.latlng.lng;
-  const clickedLat = e.latlng.lat;
+function showCoordPopup(latlng) {
+  const clickedLng = latlng.lng;
+  const clickedLat = latlng.lat;
   const currentCRS = getCurrentCRS();
 
   let gcjLng, gcjLat, wgsLng, wgsLat;
-
   if (currentCRS === 'GCJ-02') {
-    gcjLng = clickedLng;
-    gcjLat = clickedLat;
+    gcjLng = clickedLng; gcjLat = clickedLat;
     [wgsLng, wgsLat] = gcj02ToWgs84(clickedLng, clickedLat);
   } else {
-    wgsLng = clickedLng;
-    wgsLat = clickedLat;
+    wgsLng = clickedLng; wgsLat = clickedLat;
     [gcjLng, gcjLat] = wgs84ToGcj02(clickedLng, clickedLat);
   }
 
   popup
-    .setLatLng(e.latlng)
+    .setLatLng(latlng)
     .setContent(
       `<div class="coord-popup">
         <div class="coord-title">📍 当前底图：${currentCRS}</div>
@@ -996,10 +1185,243 @@ map.on('click', function (e) {
       </div>`
     )
     .openOn(map);
+}
+
+map.on('click', function (e) {
+  if (!currentTool || currentTool === 'coord') {
+    showCoordPopup(e.latlng);
+    return;
+  }
+  if (currentTool === 'distance') return handleDistanceClick(e.latlng);
+  if (currentTool === 'area')     return handleAreaClick(e.latlng);
+  if (currentTool === 'circle')   return handleCircleClick(e.latlng);
+});
+
+/* ================================================================
+   十、定位功能
+   ================================================================ */
+const LocateControl = L.Control.extend({
+  options: { position: 'bottomright' },
+  onAdd: function () {
+    const btn = L.DomUtil.create('button', 'locate-btn');
+    btn.title = '定位到我的位置';
+    btn.innerHTML = `
+      <svg viewBox="0 0 24 24">
+        <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+      </svg>`;
+    L.DomEvent.disableClickPropagation(btn);
+    L.DomEvent.on(btn, 'click', function (e) {
+      L.DomEvent.stopPropagation(e);
+      if (userWgsLng !== null && userWgsLat !== null) {
+        const coord = getDisplayCoord(userWgsLng, userWgsLat);
+        map.flyTo([coord.lat, coord.lng], 15, { duration: 1.2 });
+        if (userMarker) setTimeout(() => userMarker.openPopup(), 700);
+      } else {
+        startWatch();
+      }
+    });
+    this._btn = btn;
+    return btn;
+  }
+});
+map.addControl(new LocateControl());
+const locateButton = document.querySelector('.locate-btn');
+
+function startWatch() {
+  if (watchId !== null) return;
+  if (!navigator.geolocation) return;
+  if (locateButton) locateButton.classList.add('locating');
+  watchId = navigator.geolocation.watchPosition(
+    onPositionUpdate, onPositionError,
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+  );
+}
+
+function onPositionUpdate(position) {
+  const now = Date.now();
+  const wgsLng = position.coords.longitude;
+  const wgsLat = position.coords.latitude;
+  const accuracy = position.coords.accuracy;
+
+  userWgsLng = wgsLng;
+  userWgsLat = wgsLat;
+
+  if (lastPos) {
+    const dt = (now - lastPos.time) / 1000;
+    if (dt >= 0.8) {
+      const dist = haversine(lastPos.lat, lastPos.lng, wgsLat, wgsLng);
+      let instSpeed = 0;
+      if (dist >= 1) instSpeed = dist / dt;
+      currentSpeedMs = currentSpeedMs * 0.5 + instSpeed * 0.5;
+      if (currentSpeedMs < 0.3) currentSpeedMs = 0;
+      lastPos = { lat: wgsLat, lng: wgsLng, time: now };
+    }
+  } else {
+    lastPos = { lat: wgsLat, lng: wgsLng, time: now };
+    currentSpeedMs = 0;
+  }
+
+  if (isFirstFix) {
+    isFirstFix = false;
+    const coord = getDisplayCoord(wgsLng, wgsLat);
+    map.flyTo([coord.lat, coord.lng], map.getZoom(), { duration: 1.5 });
+    if (locateButton) {
+      locateButton.classList.remove('locating');
+      locateButton.classList.add('located');
+    }
+  }
+
+  if (now - lastMarkerUpdate >= 800) {
+    lastMarkerUpdate = now;
+    placeUserMarker(wgsLng, wgsLat, false, accuracy);
+  }
+  updateSpeedUI();
+}
+
+function onPositionError(error) {
+  if (locateButton) locateButton.classList.remove('locating');
+}
+
+function getDisplayCoord(wgsLng, wgsLat) {
+  if (currentProvider === 'esri') {
+    return { lng: wgsLng, lat: wgsLat, crs: 'WGS-84' };
+  }
+  const [gcjLng, gcjLat] = wgs84ToGcj02(wgsLng, wgsLat);
+  return { lng: gcjLng, lat: gcjLat, crs: 'GCJ-02' };
+}
+
+function placeUserMarker(wgsLng, wgsLat, showPopup, accuracy) {
+  const coord = getDisplayCoord(wgsLng, wgsLat);
+  const [gcjLng, gcjLat] = wgs84ToGcj02(wgsLng, wgsLat);
+  const accText = accuracy
+    ? `<div style="font-size:11px;color:#7f8c8d;margin-top:4px;">精度约 ±${Math.round(accuracy)} 米</div>`
+    : '';
+
+  const popupHtml = `
+    <div style="font-size:12px;line-height:1.8;min-width:190px;">
+      <b>📍 我的位置</b>
+      <div style="margin-top:4px;">
+        <span style="color:#e67e22;font-weight:600;">GCJ-02：</span><br>
+        ${gcjLng.toFixed(5)}, ${gcjLat.toFixed(5)}
+      </div>
+      <div>
+        <span style="color:#27ae60;font-weight:600;">WGS-84：</span><br>
+        ${wgsLng.toFixed(5)}, ${wgsLat.toFixed(5)}
+      </div>
+      ${accText}
+    </div>`;
+
+  if (userMarker) {
+    userMarker.setLatLng([coord.lat, coord.lng]);
+    userMarker.setPopupContent(popupHtml);
+    if (showPopup) userMarker.openPopup();
+    return;
+  }
+
+  const icon = L.divIcon({
+    className: 'user-marker',
+    html: '<div class="pulse-ring"></div><div class="dot"></div>',
+    iconSize: [30, 30], iconAnchor: [15, 15]
+  });
+  userMarker = L.marker([coord.lat, coord.lng], {
+    icon, zIndexOffset: 1000
+  }).addTo(map);
+  userMarker.bindPopup(popupHtml);
+  if (showPopup) userMarker.openPopup();
+}
+
+/* 速度面板 */
+const speedPanel = document.getElementById('speed-panel');
+const speedValueEl = speedPanel.querySelector('.speed-value');
+const speedStatusEl = speedPanel.querySelector('.speed-status');
+
+function updateSpeedUI() {
+  const kmh = currentSpeedMs * 3.6;
+  speedValueEl.textContent = kmh < 1 ? '0.0' : kmh.toFixed(1);
+
+  speedPanel.classList.remove('status-still', 'status-walk', 'status-run', 'status-drive');
+  let status = '静止';
+  if (kmh < 1) { status = '静止'; speedPanel.classList.add('status-still'); }
+  else if (kmh < 6) { status = '步行'; speedPanel.classList.add('status-walk'); }
+  else if (kmh < 25) { status = '跑步/骑行'; speedPanel.classList.add('status-run'); }
+  else { status = '乘车'; speedPanel.classList.add('status-drive'); }
+  speedStatusEl.textContent = status;
+
+  if (userWgsLng !== null) speedPanel.classList.add('visible');
+}
+
+/* ================================================================
+   十一、启动自动定位
+   ================================================================ */
+map.whenReady(function () {
+  setTimeout(startWatch, 800);
+});
+
+/* ================================================================
+   十二、系统主题监听
+   ================================================================ */
+darkModeQuery.addEventListener('change', (e) => {
+  isDarkMode = e.matches;
+  if (currentProvider === 'tencent' && currentTencentStyle === 'normal') {
+    switchLayer();
+  }
+});
+
+/* ================================================================
+   十三、瓦片源切换
+   ================================================================ */
+document.querySelectorAll('.tile-btn[data-provider]').forEach(btn => {
+  btn.addEventListener('click', function () {
+    const provider = this.dataset.provider;
+    if (provider === currentProvider) return;
+    currentProvider = provider;
+    document.querySelectorAll('.tile-btn[data-provider]').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    updateStyleBarVisibility();
+    switchLayer();
+    if (navigator.vibrate) navigator.vibrate(8);
+  });
+});
+
+document.querySelectorAll('.style-btn[data-amap-style]').forEach(btn => {
+  btn.addEventListener('click', function () {
+    const style = this.dataset.amapStyle;
+    if (style === currentAmapStyle) return;
+    currentAmapStyle = style;
+    document.querySelectorAll('.style-btn[data-amap-style]').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    if (currentProvider === 'amap') switchLayer();
+    if (navigator.vibrate) navigator.vibrate(8);
+  });
+});
+
+document.querySelectorAll('.style-btn[data-tencent-style]').forEach(btn => {
+  btn.addEventListener('click', function () {
+    const style = this.dataset.tencentStyle;
+    if (style === currentTencentStyle) return;
+    currentTencentStyle = style;
+    document.querySelectorAll('.style-btn[data-tencent-style]').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    if (currentProvider === 'tencent') switchLayer();
+    if (navigator.vibrate) navigator.vibrate(8);
+  });
+});
+
+/* ================================================================
+   十四、响应式刷新
+   ================================================================ */
+window.addEventListener('resize', () => {
+  updateLayout();
+  setTimeout(() => map.invalidateSize(), 50);
+});
+window.addEventListener('orientationchange', () => {
+  updateLayout();
+  setTimeout(() => map.invalidateSize(), 300);
 });
 
 /* 初始状态 */
 updateStyleBarVisibility();
+updateTip();
 </script>
 </body>
 </html>
